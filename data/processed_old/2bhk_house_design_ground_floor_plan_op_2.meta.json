@@ -1,0 +1,30 @@
+{
+  "file_id": "2bhk_house_design_ground_floor_plan_op_2",
+  "filename": "2bhk_house_design_ground_floor_plan_op_2.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 240,
+  "extents": {
+    "min_x": 57496.2460612513,
+    "min_y": 9315.931248682746,
+    "max_x": 58023.33499063705,
+    "max_y": 10057.02426194433,
+    "width": 527.0889293857472,
+    "height": 741.0930132615849
+  },
+  "estimated_unit": "cm",
+  "unique_layers": 12,
+  "layer_entity_counts": {
+    "WALLS GENERAL-ASAAS-0025-00-A": 108,
+    "WINDOW-ASAAS-0025-00-A": 31,
+    "TEXT1--ASAAS-0025-00-A": 22,
+    "DOORS-ASAAS-0025": 20,
+    "Compound Wall-ASAAS-0025": 16,
+    "STAIRS-ASAAS-0025-00-A": 16,
+    "PROJECTION-ASAAS-0025-00-A": 9,
+    "D": 8,
+    "DIM-ASAAS-0025-00-A": 4,
+    "Seal Title": 3,
+    "WALL MAIN-ASAAS-0025-00-A": 2,
+    "TEXT-ASAAS-0025": 1
+  }
+}

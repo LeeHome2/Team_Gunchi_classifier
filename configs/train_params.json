@@ -1,0 +1,20 @@
+{
+  "classifier": "xgboost",
+  "n_estimators": 400,
+  "max_depth": 7,
+  "learning_rate": 0.08,
+  "early_stopping_rounds": 20,
+  "random_seed": 42,
+  "split": {
+    "by": "file_id",
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "test_ratio": 0.15
+  },
+  "features": {
+    "use_embedding": true,
+    "embedding_dim": 768,
+    "use_geometry": true,
+    "use_entity_type_onehot": true
+  }
+}

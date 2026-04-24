@@ -1,0 +1,36 @@
+{
+  "file_id": "3_bhk_house_design_first_floor_plan",
+  "filename": "3_bhk_house_design_first_floor_plan.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 1046,
+  "extents": {
+    "min_x": 42371.09880976581,
+    "min_y": 11959.39776246748,
+    "max_x": 43071.00923120271,
+    "max_y": 12956.1723634198,
+    "width": 699.9104214368999,
+    "height": 996.7746009523198
+  },
+  "estimated_unit": "cm",
+  "unique_layers": 18,
+  "layer_entity_counts": {
+    "Beams & Archs": 189,
+    "WALL": 181,
+    "FIXERS": 144,
+    "FIXER": 108,
+    "stair-steps": 76,
+    "WINDOW": 72,
+    "text": 71,
+    "TAB": 57,
+    "Column": 36,
+    "stair-railing": 35,
+    "Northing": 21,
+    "windoor": 20,
+    "WINDOWS": 12,
+    "Seal Title": 11,
+    "Tiles": 8,
+    "HATCHING": 2,
+    "KHAPRAIL": 2,
+    "Defpoints": 1
+  }
+}

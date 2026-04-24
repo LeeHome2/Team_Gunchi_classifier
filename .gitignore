@@ -1,0 +1,47 @@
+# ─── Python ─────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# ─── 환경변수 (API 키 등) ──────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── 데이터 (재생성 가능) ──────────────────
+data/raw/
+data/preview/
+data/processed/
+data/cropped/
+data/labeled/
+data/splits/
+
+# ─── 학습 산출물 ──────────────────────────
+models/saved/**/*.pkl
+models/saved/**/*.joblib
+models/saved/**/*.json
+models/saved/**/
+!models/saved/.gitkeep
+
+# ─── MLOps DB (런타임 생성) ────────────────
+mlops.db
+mlops.db-journal
+mlops.db-wal
+mlops.db-shm
+
+# ─── OS / IDE ─────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# ─── 리포트는 커밋 OK (발표/분석 자료) ─────
+!data/reports/

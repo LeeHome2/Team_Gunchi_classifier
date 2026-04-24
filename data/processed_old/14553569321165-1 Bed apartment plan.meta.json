@@ -1,0 +1,26 @@
+{
+  "file_id": "14553569321165-1 Bed apartment plan",
+  "filename": "14553569321165-1 Bed apartment plan.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 3292,
+  "extents": {
+    "min_x": 73624.60929389206,
+    "min_y": 56407.08612135091,
+    "max_x": 86211.28948218182,
+    "max_y": 62247.45942301159,
+    "width": 12586.680188289756,
+    "height": 5840.373301660678
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 8,
+  "layer_entity_counts": {
+    "CBF-Furniture": 2456,
+    "ASHADE": 720,
+    "0": 42,
+    "A-Walls": 38,
+    "CBF-Kitchen Furniture": 18,
+    "A-Details Door Ref. Tag-G": 15,
+    "A-External Walls-G": 2,
+    "A-Existing Wall hatch": 1
+  }
+}

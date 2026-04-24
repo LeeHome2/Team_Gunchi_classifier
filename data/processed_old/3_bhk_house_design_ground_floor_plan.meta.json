@@ -1,0 +1,30 @@
+{
+  "file_id": "3_bhk_house_design_ground_floor_plan",
+  "filename": "3_bhk_house_design_ground_floor_plan.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 551,
+  "extents": {
+    "min_x": 43111.71273749456,
+    "min_y": 11959.39776246748,
+    "max_x": 43811.62315893146,
+    "max_y": 12956.1723634198,
+    "width": 699.9104214368999,
+    "height": 996.7746009523198
+  },
+  "estimated_unit": "cm",
+  "unique_layers": 12,
+  "layer_entity_counts": {
+    "Beams & Archs": 152,
+    "WALL": 128,
+    "stair-steps": 59,
+    "Column": 42,
+    "text": 41,
+    "TAB": 38,
+    "WINDOW": 37,
+    "windoor": 27,
+    "DIM": 17,
+    "Seal Title": 8,
+    "Defpoints": 1,
+    "KHAPRAIL": 1
+  }
+}

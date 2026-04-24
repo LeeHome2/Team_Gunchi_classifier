@@ -1,0 +1,30 @@
+{
+  "file_id": "1595655549SINGLE FAMILY HOUSE EXECTING FIRST FLOOR  PLAN OPT-1",
+  "filename": "1595655549SINGLE FAMILY HOUSE EXECTING FIRST FLOOR  PLAN OPT-1.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 361,
+  "extents": {
+    "min_x": 114566.5406365361,
+    "min_y": -74516.31637397119,
+    "max_x": 115288.3663912051,
+    "max_y": -74077.71316154515,
+    "width": 721.8257546690002,
+    "height": 438.6032124260382
+  },
+  "estimated_unit": "cm",
+  "unique_layers": 12,
+  "layer_entity_counts": {
+    "INTERNALWALL": 115,
+    "0": 80,
+    "01": 48,
+    "A-Glaz": 27,
+    "Walls": 26,
+    "Text": 19,
+    "STAIR-ELEVATOR": 12,
+    "Dash": 11,
+    "Wood work": 8,
+    "Dimensions": 7,
+    "04": 5,
+    "PLUMBING": 3
+  }
+}

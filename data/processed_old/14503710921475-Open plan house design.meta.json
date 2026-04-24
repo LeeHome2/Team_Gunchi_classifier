@@ -1,0 +1,20 @@
+{
+  "file_id": "14503710921475-Open plan house design",
+  "filename": "14503710921475-Open plan house design.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 739,
+  "extents": {
+    "min_x": -358629.7134892807,
+    "min_y": -986017.3662047918,
+    "max_x": -327503.8674431518,
+    "max_y": -845034.3125303469,
+    "width": 31125.84604612895,
+    "height": 140983.0536744449
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 2,
+  "layer_entity_counts": {
+    "www.cadblocksfree.com": 738,
+    "13004 proposed upper ground floor plan$0$INSERTION POINTS": 1
+  }
+}

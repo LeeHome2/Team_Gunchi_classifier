@@ -1,0 +1,51 @@
+{
+  "args": {
+    "dxf_dir": "..\\데이터셋1-dxf\\dxf",
+    "limit": 5,
+    "mock": true,
+    "skip_parse": false,
+    "skip_render": false,
+    "skip_detect": false,
+    "skip_crop": false,
+    "skip_label": false
+  },
+  "stages": [
+    {
+      "stage": "parse",
+      "ok": 5,
+      "fail": 0,
+      "total": 5
+    },
+    {
+      "stage": "render",
+      "ok": 0,
+      "skip_cached": 5,
+      "fail": 0
+    },
+    {
+      "stage": "detect",
+      "ok": 5,
+      "cached": 5,
+      "fail": 0,
+      "elapsed_s": 0.0
+    },
+    {
+      "stage": "crop",
+      "ok": 5,
+      "skip": 0,
+      "fail": 0,
+      "total_cropped_entities": 7285
+    },
+    {
+      "stage": "label",
+      "ok": 5,
+      "fail": 0,
+      "distribution": {
+        "wall": 475,
+        "door": 136,
+        "window": 167,
+        "other": 6507
+      }
+    }
+  ]
+}

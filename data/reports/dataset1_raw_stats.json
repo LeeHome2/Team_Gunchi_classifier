@@ -1,0 +1,1897 @@
+{
+  "total_files": 98,
+  "successful": 98,
+  "failed": [],
+  "file_stats": [
+    {
+      "file": "14503710921475-Open plan house design.dxf",
+      "size_kb": 742.0,
+      "entities": 739,
+      "layers": 2,
+      "entity_types": {
+        "LWPOLYLINE": 664,
+        "LINE": 40,
+        "INSERT": 15,
+        "HATCH": 9,
+        "ARC": 8
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "14524557351136-Student accomodation floor plan.dxf",
+      "size_kb": 1145.5,
+      "entities": 2270,
+      "layers": 17,
+      "entity_types": {
+        "LINE": 1123,
+        "INSERT": 777,
+        "MTEXT": 118,
+        "ARC": 115,
+        "LWPOLYLINE": 95
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "1452880594149_Architectural_Floor Pan Examplel 01.dxf",
+      "size_kb": 2557.7,
+      "entities": 2,
+      "layers": 1,
+      "entity_types": {
+        "INSERT": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "14553569321165-1 Bed apartment plan.dxf",
+      "size_kb": 1587.1,
+      "entities": 3292,
+      "layers": 8,
+      "entity_types": {
+        "LINE": 2264,
+        "INSERT": 762,
+        "LWPOLYLINE": 148,
+        "ARC": 46,
+        "ELLIPSE": 38
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "14553569321167-1 Bed apartment plan.dxf",
+      "size_kb": 1566.7,
+      "entities": 3269,
+      "layers": 7,
+      "entity_types": {
+        "LINE": 2261,
+        "INSERT": 762,
+        "LWPOLYLINE": 128,
+        "ARC": 49,
+        "ELLIPSE": 38
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "1587136825Typical floor plan Residential.dxf",
+      "size_kb": 1258.2,
+      "entities": 700,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 580,
+        "LWPOLYLINE": 37,
+        "3DSOLID": 31,
+        "MTEXT": 25,
+        "ARC": 20
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "1587601309OFFICE SPACE FLOOR PLAN (50' X53').dxf",
+      "size_kb": 1276.7,
+      "entities": 400,
+      "layers": 19,
+      "entity_types": {
+        "LINE": 313,
+        "LWPOLYLINE": 27,
+        "TEXT": 25,
+        "INSERT": 15,
+        "HATCH": 8
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "1595655549SINGLE FAMILY HOUSE EXECTING FIRST FLOOR  PLAN OPT-1.dxf",
+      "size_kb": 1052.3,
+      "entities": 361,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 148,
+        "LWPOLYLINE": 61,
+        "DIMENSION": 50,
+        "ARC": 32,
+        "ACAD_PROXY_ENTITY": 21
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "1623589132Womans hostel with facade design-Ground Floor Plan.dxf",
+      "size_kb": 624.9,
+      "entities": 694,
+      "layers": 9,
+      "entity_types": {
+        "LINE": 554,
+        "DIMENSION": 58,
+        "ARC": 32,
+        "CIRCLE": 18,
+        "MTEXT": 12
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2_bed_house_design_ground_floor_plan_1.dxf",
+      "size_kb": 314.8,
+      "entities": 448,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 389,
+        "TEXT": 37,
+        "INSERT": 14,
+        "DIMENSION": 4,
+        "ARC": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_german_style_house_ground_floor_plan_1.dxf",
+      "size_kb": 714.1,
+      "entities": 536,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 309,
+        "DIMENSION": 102,
+        "TEXT": 42,
+        "HATCH": 28,
+        "LWPOLYLINE": 23
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_house_design_ground_floor_plan_op_1.dxf",
+      "size_kb": 329.4,
+      "entities": 275,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 229,
+        "TEXT": 27,
+        "INSERT": 11,
+        "DIMENSION": 4,
+        "LWPOLYLINE": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_house_design_ground_floor_plan_op_2.dxf",
+      "size_kb": 324.5,
+      "entities": 240,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 196,
+        "TEXT": 24,
+        "INSERT": 10,
+        "LWPOLYLINE": 4,
+        "DIMENSION": 4
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_house_design_ground_floor_plan_op_3.dxf",
+      "size_kb": 328.2,
+      "entities": 275,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 224,
+        "TEXT": 31,
+        "INSERT": 12,
+        "DIMENSION": 4,
+        "ARC": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_villa_design_ground_floor_plan_1.dxf",
+      "size_kb": 275.2,
+      "entities": 443,
+      "layers": 9,
+      "entity_types": {
+        "LINE": 336,
+        "ARC": 53,
+        "LWPOLYLINE": 32,
+        "TEXT": 22
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "2bhk_villa_design_ground_floor_plan_2.dxf",
+      "size_kb": 370.4,
+      "entities": 880,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 579,
+        "ARC": 192,
+        "LWPOLYLINE": 79,
+        "TEXT": 24,
+        "CIRCLE": 6
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "3_bhk_house_design_first_floor_plan.dxf",
+      "size_kb": 492.5,
+      "entities": 1046,
+      "layers": 18,
+      "entity_types": {
+        "LINE": 765,
+        "ARC": 105,
+        "TEXT": 78,
+        "HATCH": 24,
+        "LWPOLYLINE": 22
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "3_bhk_house_design_ground_floor_plan.dxf",
+      "size_kb": 291.5,
+      "entities": 551,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 374,
+        "ARC": 63,
+        "TEXT": 44,
+        "LWPOLYLINE": 21,
+        "INSERT": 17
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "3bhk_house_design_ground_floor_plan_op_1.dxf",
+      "size_kb": 513.7,
+      "entities": 1141,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 830,
+        "ARC": 184,
+        "TEXT": 80,
+        "HATCH": 24,
+        "LWPOLYLINE": 19
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "3bhk_house_design_ground_floor_plan_op_2.dxf",
+      "size_kb": 573.8,
+      "entities": 1124,
+      "layers": 14,
+      "entity_types": {
+        "LINE": 901,
+        "TEXT": 108,
+        "HATCH": 40,
+        "LWPOLYLINE": 32,
+        "INSERT": 32
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "4bhk_house_design_first_floor_plan_2.dxf",
+      "size_kb": 662.0,
+      "entities": 1527,
+      "layers": 23,
+      "entity_types": {
+        "LINE": 801,
+        "TEXT": 238,
+        "ARC": 223,
+        "LWPOLYLINE": 129,
+        "CIRCLE": 66
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "4bhk_house_design_ground_floor_plan_1.dxf",
+      "size_kb": 686.2,
+      "entities": 1969,
+      "layers": 23,
+      "entity_types": {
+        "LINE": 1049,
+        "ARC": 305,
+        "TEXT": 235,
+        "LWPOLYLINE": 194,
+        "CIRCLE": 90
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "4bhk_house_design_with_car_porch_first_floor_plan_2.dxf",
+      "size_kb": 757.6,
+      "entities": 989,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 592,
+        "DIMENSION": 126,
+        "TEXT": 124,
+        "LWPOLYLINE": 70,
+        "ARC": 37
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "american_standard_multistoried_shopping_mall_design_gf_plan.dxf",
+      "size_kb": 489.3,
+      "entities": 1390,
+      "layers": 20,
+      "entity_types": {
+        "LINE": 775,
+        "TEXT": 342,
+        "ARC": 166,
+        "LWPOLYLINE": 94,
+        "SOLID": 12
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "american_style_house_first_second_floor_plan.dxf",
+      "size_kb": 2001.4,
+      "entities": 3302,
+      "layers": 29,
+      "entity_types": {
+        "LWPOLYLINE": 1656,
+        "ARC": 949,
+        "LINE": 353,
+        "MTEXT": 105,
+        "CIRCLE": 95
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_building_plan-lev-1.dxf",
+      "size_kb": 740.7,
+      "entities": 1755,
+      "layers": 19,
+      "entity_types": {
+        "LINE": 1228,
+        "LWPOLYLINE": 209,
+        "TEXT": 143,
+        "ARC": 105,
+        "CIRCLE": 47
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_building_plan-lev-2-3.dxf",
+      "size_kb": 2421.1,
+      "entities": 4131,
+      "layers": 20,
+      "entity_types": {
+        "LINE": 2495,
+        "ARC": 455,
+        "DIMENSION": 340,
+        "TEXT": 231,
+        "LWPOLYLINE": 197
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_for_4_families_house_ff_plan_2.dxf",
+      "size_kb": 969.2,
+      "entities": 1032,
+      "layers": 29,
+      "entity_types": {
+        "LINE": 566,
+        "MTEXT": 196,
+        "INSERT": 104,
+        "CIRCLE": 78,
+        "HATCH": 53
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_for_4_families_house_gf_plan_1.dxf",
+      "size_kb": 878.4,
+      "entities": 1063,
+      "layers": 27,
+      "entity_types": {
+        "LINE": 576,
+        "MTEXT": 208,
+        "INSERT": 105,
+        "CIRCLE": 80,
+        "HATCH": 54
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_multistoried_building_house_design_2nd_floor_plan.dxf",
+      "size_kb": 504.0,
+      "entities": 1298,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 1077,
+        "TEXT": 85,
+        "HATCH": 46,
+        "ARC": 43,
+        "INSERT": 24
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_multistoried_building_house_design_first_floor_plan.dxf",
+      "size_kb": 499.3,
+      "entities": 1280,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 1068,
+        "TEXT": 83,
+        "HATCH": 47,
+        "ARC": 36,
+        "INSERT": 24
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartment_multistoried_building_house_design_ground_floor_plan.dxf",
+      "size_kb": 254.1,
+      "entities": 695,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 551,
+        "TEXT": 52,
+        "HATCH": 45,
+        "ARC": 24,
+        "LWPOLYLINE": 17
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_commercial_flats_3rd_floor_plan_7.dxf",
+      "size_kb": 1832.6,
+      "entities": 4728,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 3937,
+        "ARC": 249,
+        "TEXT": 161,
+        "INSERT": 138,
+        "CIRCLE": 123
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_commercial_flats_4rth_floor_plan_8.dxf",
+      "size_kb": 1824.0,
+      "entities": 4684,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 3905,
+        "ARC": 246,
+        "TEXT": 157,
+        "INSERT": 135,
+        "CIRCLE": 121
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_commercial_flats_first_floor_plan_4.dxf",
+      "size_kb": 1823.7,
+      "entities": 5449,
+      "layers": 20,
+      "entity_types": {
+        "LINE": 4350,
+        "ARC": 645,
+        "TEXT": 171,
+        "INSERT": 108,
+        "LWPOLYLINE": 71
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_commercial_flats_lower_ground_floor_plan_2.dxf",
+      "size_kb": 1402.0,
+      "entities": 3420,
+      "layers": 18,
+      "entity_types": {
+        "LINE": 2925,
+        "ARC": 164,
+        "TEXT": 98,
+        "LWPOLYLINE": 83,
+        "INSERT": 76
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_commercial_flats_second_floor_plan_6.dxf",
+      "size_kb": 2112.7,
+      "entities": 6707,
+      "layers": 18,
+      "entity_types": {
+        "LINE": 5273,
+        "ARC": 839,
+        "TEXT": 166,
+        "INSERT": 133,
+        "LWPOLYLINE": 130
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_10_.dxf",
+      "size_kb": 1264.8,
+      "entities": 3318,
+      "layers": 34,
+      "entity_types": {
+        "LINE": 3194,
+        "LWPOLYLINE": 32,
+        "MTEXT": 23,
+        "INSERT": 18,
+        "DIMENSION": 18
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_11_.dxf",
+      "size_kb": 955.8,
+      "entities": 1196,
+      "layers": 38,
+      "entity_types": {
+        "LINE": 859,
+        "LWPOLYLINE": 102,
+        "MTEXT": 63,
+        "INSERT": 55,
+        "HATCH": 40
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_6_.dxf",
+      "size_kb": 969.2,
+      "entities": 1032,
+      "layers": 29,
+      "entity_types": {
+        "LINE": 566,
+        "MTEXT": 196,
+        "INSERT": 104,
+        "CIRCLE": 78,
+        "HATCH": 53
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_7_.dxf",
+      "size_kb": 878.4,
+      "entities": 1063,
+      "layers": 27,
+      "entity_types": {
+        "LINE": 576,
+        "MTEXT": 208,
+        "INSERT": 105,
+        "CIRCLE": 80,
+        "HATCH": 54
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_8_.dxf",
+      "size_kb": 503.8,
+      "entities": 659,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 515,
+        "MTEXT": 64,
+        "CIRCLE": 35,
+        "LWPOLYLINE": 34,
+        "INSERT": 8
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "apartments_for_small_families_complete_drawings-_9_.dxf",
+      "size_kb": 480.3,
+      "entities": 474,
+      "layers": 23,
+      "entity_types": {
+        "LINE": 309,
+        "MTEXT": 66,
+        "CIRCLE": 35,
+        "INSERT": 23,
+        "LWPOLYLINE": 18
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "appartment_building_1__first_floor_plan.dxf",
+      "size_kb": 925.1,
+      "entities": 2702,
+      "layers": 21,
+      "entity_types": {
+        "LINE": 1852,
+        "ARC": 318,
+        "INSERT": 186,
+        "TEXT": 164,
+        "LWPOLYLINE": 78
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "appartment_building_1__ground_floor_plan.dxf",
+      "size_kb": 453.7,
+      "entities": 1242,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 859,
+        "ARC": 124,
+        "LWPOLYLINE": 123,
+        "TEXT": 120,
+        "HATCH": 7
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "appartment_building_1__second_floor_plan.dxf",
+      "size_kb": 873.4,
+      "entities": 2461,
+      "layers": 21,
+      "entity_types": {
+        "LINE": 1645,
+        "ARC": 288,
+        "INSERT": 194,
+        "TEXT": 146,
+        "LWPOLYLINE": 90
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "appartment_building_2_proposel_1_ground_floor_plan.dxf",
+      "size_kb": 1424.5,
+      "entities": 4387,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 3996,
+        "TEXT": 156,
+        "ARC": 138,
+        "INSERT": 52,
+        "LWPOLYLINE": 37
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_ground_floor_plan_op__2_.dxf",
+      "size_kb": 324.5,
+      "entities": 240,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 196,
+        "TEXT": 24,
+        "INSERT": 10,
+        "LWPOLYLINE": 4,
+        "DIMENSION": 4
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_ground_floor_plan_op__3_.dxf",
+      "size_kb": 328.2,
+      "entities": 275,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 224,
+        "TEXT": 31,
+        "INSERT": 12,
+        "DIMENSION": 4,
+        "ARC": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_market_design_ground_floor_plan_op_1.dxf",
+      "size_kb": 421.1,
+      "entities": 1047,
+      "layers": 15,
+      "entity_types": {
+        "LINE": 823,
+        "TEXT": 117,
+        "ARC": 63,
+        "LWPOLYLINE": 34,
+        "DIMENSION": 8
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_market_design_ground_floor_plan_op_2.dxf",
+      "size_kb": 532.3,
+      "entities": 1084,
+      "layers": 15,
+      "entity_types": {
+        "LINE": 851,
+        "TEXT": 120,
+        "ARC": 62,
+        "LWPOLYLINE": 41,
+        "DIMENSION": 8
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_pemra_office_layout_plan_op_3.dxf",
+      "size_kb": 446.5,
+      "entities": 1231,
+      "layers": 5,
+      "entity_types": {
+        "LINE": 982,
+        "ARC": 67,
+        "POINT": 62,
+        "MLINE": 58,
+        "TEXT": 47
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_pemra_office_layout_plan_op_4.dxf",
+      "size_kb": 433.3,
+      "entities": 1175,
+      "layers": 4,
+      "entity_types": {
+        "LINE": 933,
+        "ARC": 67,
+        "MLINE": 60,
+        "POINT": 57,
+        "TEXT": 48
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_pizza_club_frist_floor_layout_plan_op_1.dxf",
+      "size_kb": 1675.7,
+      "entities": 7946,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 7245,
+        "ARC": 346,
+        "ELLIPSE": 157,
+        "CIRCLE": 77,
+        "LWPOLYLINE": 77
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asian_style_pizza_club_frist_floor_layout_plan_op_2.dxf",
+      "size_kb": 1584.4,
+      "entities": 6908,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 6241,
+        "ARC": 355,
+        "ELLIPSE": 133,
+        "CIRCLE": 69,
+        "LWPOLYLINE": 67
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "asp_guard_house_ground_floor_plan.dxf",
+      "size_kb": 338.3,
+      "entities": 343,
+      "layers": 27,
+      "entity_types": {
+        "LINE": 154,
+        "TEXT": 49,
+        "LWPOLYLINE": 44,
+        "MTEXT": 39,
+        "HATCH": 17
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "australian_smart_house_design_floor_plan_2.dxf",
+      "size_kb": 1105.1,
+      "entities": 558,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 317,
+        "MTEXT": 88,
+        "DIMENSION": 81,
+        "INSERT": 42,
+        "LWPOLYLINE": 12
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "cabin_floor_plan_option__a.dxf",
+      "size_kb": 1236.5,
+      "entities": 2450,
+      "layers": 15,
+      "entity_types": {
+        "3DFACE": 1213,
+        "LINE": 427,
+        "ARC": 395,
+        "LWPOLYLINE": 283,
+        "CIRCLE": 74
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "castle_design_architectural_floor_plan_3_.dxf",
+      "size_kb": 1166.9,
+      "entities": 845,
+      "layers": 9,
+      "entity_types": {
+        "LINE": 621,
+        "CIRCLE": 95,
+        "INSERT": 50,
+        "ELLIPSE": 27,
+        "MTEXT": 20
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "castle_design_architectural_floor_plan_4_.dxf",
+      "size_kb": 1479.6,
+      "entities": 5475,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 4669,
+        "ARC": 447,
+        "LWPOLYLINE": 218,
+        "TEXT": 49,
+        "CIRCLE": 30
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "castle_design_architectural_floor_plan_6_.dxf",
+      "size_kb": 268.8,
+      "entities": 389,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 201,
+        "LWPOLYLINE": 54,
+        "TEXT": 54,
+        "POLYLINE": 32,
+        "HATCH": 17
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "clinic_facility_ground_floor_plan_1.dxf",
+      "size_kb": 1595.1,
+      "entities": 6101,
+      "layers": 18,
+      "entity_types": {
+        "LINE": 4330,
+        "ELLIPSE": 1138,
+        "ARC": 328,
+        "LWPOLYLINE": 136,
+        "INSERT": 46
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "clinic_facility_ground_floor_plan_2.dxf",
+      "size_kb": 980.3,
+      "entities": 1167,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 775,
+        "DIMENSION": 179,
+        "INSERT": 108,
+        "LWPOLYLINE": 49,
+        "MTEXT": 36
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "clinic_facility_ground_floor_plan_3.dxf",
+      "size_kb": 1011.7,
+      "entities": 1272,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 845,
+        "DIMENSION": 177,
+        "INSERT": 146,
+        "LWPOLYLINE": 49,
+        "MTEXT": 36
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "degitizing_in_autocad.dxf",
+      "size_kb": 372.7,
+      "entities": 800,
+      "layers": 6,
+      "entity_types": {
+        "LINE": 786,
+        "CIRCLE": 12,
+        "DIMENSION": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "family_truss_roof_house_design_first_floor_plan.dxf",
+      "size_kb": 629.5,
+      "entities": 1316,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 818,
+        "ARC": 212,
+        "LWPOLYLINE": 110,
+        "TEXT": 46,
+        "HATCH": 34
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "family_truss_roof_house_design_ground_floor_plan.dxf",
+      "size_kb": 1476.6,
+      "entities": 5476,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 4669,
+        "ARC": 447,
+        "LWPOLYLINE": 219,
+        "TEXT": 49,
+        "CIRCLE": 30
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flat_type_small_house_type-3_1st_floor_plan_details_3.dxf",
+      "size_kb": 3539.5,
+      "entities": 12320,
+      "layers": 54,
+      "entity_types": {
+        "LWPOLYLINE": 11659,
+        "MTEXT": 283,
+        "SOLID": 191,
+        "ARC": 103,
+        "HATCH": 65
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flat_type_small_house_type-4_1st_floor_plan_details_4.dxf",
+      "size_kb": 3337.1,
+      "entities": 11627,
+      "layers": 52,
+      "entity_types": {
+        "LWPOLYLINE": 11102,
+        "MTEXT": 231,
+        "SOLID": 124,
+        "ARC": 106,
+        "HATCH": 48
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flat_type_small_house_type-5_1st_floor_plan_details_5.dxf",
+      "size_kb": 3104.8,
+      "entities": 10813,
+      "layers": 51,
+      "entity_types": {
+        "LWPOLYLINE": 10341,
+        "MTEXT": 211,
+        "ARC": 105,
+        "SOLID": 104,
+        "HATCH": 38
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flat_type_small_house_type-6_1st_floor_plan_details_6.dxf",
+      "size_kb": 3338.6,
+      "entities": 11743,
+      "layers": 46,
+      "entity_types": {
+        "LWPOLYLINE": 11130,
+        "MTEXT": 256,
+        "SOLID": 164,
+        "ARC": 136,
+        "HATCH": 44
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flat_type_small_house_type-7_1st_floor_plan_details_7.dxf",
+      "size_kb": 3372.8,
+      "entities": 11870,
+      "layers": 46,
+      "entity_types": {
+        "LWPOLYLINE": 11264,
+        "MTEXT": 260,
+        "SOLID": 156,
+        "ARC": 129,
+        "HATCH": 48
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "flate_type_small_house_type-1_1st_floor_plan_details_1.dxf",
+      "size_kb": 3103.1,
+      "entities": 10990,
+      "layers": 41,
+      "entity_types": {
+        "LWPOLYLINE": 10485,
+        "MTEXT": 210,
+        "ARC": 117,
+        "SOLID": 115,
+        "HATCH": 42
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "floor_plan_for_freelancer_dwg_2d_file.dxf",
+      "size_kb": 1296.2,
+      "entities": 891,
+      "layers": 17,
+      "entity_types": {
+        "LINE": 532,
+        "SOLID": 194,
+        "MTEXT": 106,
+        "LWPOLYLINE": 27,
+        "INSERT": 21
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "german_style_2bhk_house_design_with_dining_car_porch_first_floor_plan_2.dxf",
+      "size_kb": 827.4,
+      "entities": 1223,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 760,
+        "TEXT": 138,
+        "ARC": 126,
+        "DIMENSION": 112,
+        "LWPOLYLINE": 36
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "german_style_2bhk_house_design_with_dining_car_porch_ground_floor_plan_1.dxf",
+      "size_kb": 826.9,
+      "entities": 1215,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 715,
+        "ARC": 144,
+        "DIMENSION": 131,
+        "TEXT": 129,
+        "LWPOLYLINE": 51
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "health_care_clinic_first_floor_plan_1_1.dxf",
+      "size_kb": 3228.3,
+      "entities": 14383,
+      "layers": 5,
+      "entity_types": {
+        "LINE": 9226,
+        "ARC": 3579,
+        "LWPOLYLINE": 1442,
+        "TEXT": 72,
+        "CIRCLE": 53
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "italy_house_design_first_floor_plan.dxf",
+      "size_kb": 468.7,
+      "entities": 427,
+      "layers": 9,
+      "entity_types": {
+        "LINE": 327,
+        "MTEXT": 40,
+        "DIMENSION": 36,
+        "ARC": 20,
+        "LWPOLYLINE": 3
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "italy_house_design_ground_floor_plan.dxf",
+      "size_kb": 481.7,
+      "entities": 359,
+      "layers": 12,
+      "entity_types": {
+        "LINE": 252,
+        "DIMENSION": 44,
+        "MTEXT": 30,
+        "ARC": 20,
+        "LWPOLYLINE": 10
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "metal_structure_high_roof_1.dxf",
+      "size_kb": 1007.0,
+      "entities": 718,
+      "layers": 19,
+      "entity_types": {
+        "LINE": 274,
+        "DIMENSION": 125,
+        "INSERT": 96,
+        "LEADER": 79,
+        "LWPOLYLINE": 71
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "multi_story_building_1__ground_floor_plan.dxf",
+      "size_kb": 453.7,
+      "entities": 1242,
+      "layers": 13,
+      "entity_types": {
+        "LINE": 859,
+        "ARC": 124,
+        "LWPOLYLINE": 123,
+        "TEXT": 120,
+        "HATCH": 7
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "multi_story_building_1__second_floor_plan.dxf",
+      "size_kb": 873.4,
+      "entities": 2461,
+      "layers": 21,
+      "entity_types": {
+        "LINE": 1645,
+        "ARC": 288,
+        "INSERT": 194,
+        "TEXT": 146,
+        "LWPOLYLINE": 90
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "multistoried_brick_masnory_wall_house_design_ff_plan.dxf",
+      "size_kb": 480.9,
+      "entities": 665,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 445,
+        "ARC": 64,
+        "TEXT": 63,
+        "DIMENSION": 46,
+        "CIRCLE": 27
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "new_church_design_floor_plan_side_views.dxf",
+      "size_kb": 5379.9,
+      "entities": 15243,
+      "layers": 15,
+      "entity_types": {
+        "LINE": 7428,
+        "ARC": 3264,
+        "ELLIPSE": 2076,
+        "LWPOLYLINE": 1558,
+        "HATCH": 412
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "nigerian_house_design_with_dining_car_porch_first_floor_plan_2.dxf",
+      "size_kb": 827.4,
+      "entities": 1223,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 760,
+        "TEXT": 138,
+        "ARC": 126,
+        "DIMENSION": 112,
+        "LWPOLYLINE": 36
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "nigerian_house_design_with_dining_car_porch_ground_floor_plan_1.dxf",
+      "size_kb": 826.9,
+      "entities": 1215,
+      "layers": 10,
+      "entity_types": {
+        "LINE": 715,
+        "ARC": 144,
+        "DIMENSION": 131,
+        "TEXT": 129,
+        "LWPOLYLINE": 51
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "preliminary_architectural_design-first_floor_layout.dxf",
+      "size_kb": 357.0,
+      "entities": 815,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 653,
+        "TEXT": 72,
+        "LWPOLYLINE": 56,
+        "INSERT": 28,
+        "DIMENSION": 2
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "preliminary_architectural_design-ground_floor_layout.dxf",
+      "size_kb": 375.2,
+      "entities": 787,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 613,
+        "TEXT": 72,
+        "LWPOLYLINE": 60,
+        "INSERT": 28,
+        "DIMENSION": 10
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "rectangular_shape_3_bedroom_house_design_ground_floor_plan_op_1.dxf",
+      "size_kb": 212.1,
+      "entities": 487,
+      "layers": 11,
+      "entity_types": {
+        "LINE": 412,
+        "TEXT": 37,
+        "INSERT": 14,
+        "ARC": 13,
+        "HATCH": 5
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "school_multistoried_building_design_ground_floor_plan_a.dxf",
+      "size_kb": 567.2,
+      "entities": 283,
+      "layers": 6,
+      "entity_types": {
+        "LINE": 116,
+        "INSERT": 49,
+        "LWPOLYLINE": 44,
+        "HATCH": 32,
+        "TEXT": 27
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "slop-house-det-2.dxf",
+      "size_kb": 1119.3,
+      "entities": 559,
+      "layers": 16,
+      "entity_types": {
+        "LINE": 317,
+        "MTEXT": 88,
+        "DIMENSION": 81,
+        "INSERT": 43,
+        "LWPOLYLINE": 12
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "steel_building_with_h_beam_metal_truss_5_.dxf",
+      "size_kb": 2085.4,
+      "entities": 238,
+      "layers": 9,
+      "entity_types": {
+        "DIMENSION": 134,
+        "MTEXT": 34,
+        "INSERT": 25,
+        "LWPOLYLINE": 15,
+        "TEXT": 9
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "tiny_house_floor_plans_1_.dxf",
+      "size_kb": 762.2,
+      "entities": 488,
+      "layers": 14,
+      "entity_types": {
+        "LINE": 202,
+        "LWPOLYLINE": 109,
+        "DIMENSION": 100,
+        "INSERT": 28,
+        "HATCH": 20
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "tiny_house_floor_plans_2_.dxf",
+      "size_kb": 703.7,
+      "entities": 513,
+      "layers": 17,
+      "entity_types": {
+        "LINE": 191,
+        "LWPOLYLINE": 144,
+        "DIMENSION": 91,
+        "INSERT": 29,
+        "HATCH": 21
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "usa_apartment_ath_12-sheet_-_a101_-_floor_plans.dxf",
+      "size_kb": 4690.5,
+      "entities": 3747,
+      "layers": 40,
+      "entity_types": {
+        "LINE": 2642,
+        "INSERT": 621,
+        "MTEXT": 443,
+        "HATCH": 31,
+        "CIRCLE": 5
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "usa_apartment_ath_12-sheet_-_a102_-_floor_plans.dxf",
+      "size_kb": 3498.8,
+      "entities": 3191,
+      "layers": 29,
+      "entity_types": {
+        "LINE": 2220,
+        "INSERT": 565,
+        "MTEXT": 394,
+        "HATCH": 11,
+        "LWPOLYLINE": 1
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "usa_apartment_ath_12-sheet_-_a103_-_floor_plans.dxf",
+      "size_kb": 2704.1,
+      "entities": 1993,
+      "layers": 26,
+      "entity_types": {
+        "LINE": 1359,
+        "INSERT": 378,
+        "MTEXT": 253,
+        "HATCH": 2,
+        "LWPOLYLINE": 1
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    },
+    {
+      "file": "wood_stove_room_ground_floor_plan.dxf",
+      "size_kb": 626.7,
+      "entities": 756,
+      "layers": 37,
+      "entity_types": {
+        "LINE": 348,
+        "LWPOLYLINE": 160,
+        "TEXT": 79,
+        "MTEXT": 38,
+        "INSERT": 35
+      },
+      "bbox_size": [
+        null,
+        null
+      ],
+      "dxfversion": "AC1027"
+    }
+  ],
+  "dxf_versions": {
+    "AC1027": 98
+  },
+  "all_entity_types": {
+    "INSERT": 7003,
+    "LWPOLYLINE": 76601,
+    "HATCH": 1861,
+    "LINE": 127434,
+    "CIRCLE": 2576,
+    "ARC": 17881,
+    "EXTRUDEDSURFACE": 1,
+    "MTEXT": 4777,
+    "DIMENSION": 2637,
+    "TEXT": 5473,
+    "ELLIPSE": 3790,
+    "3DSOLID": 31,
+    "ACAD_PROXY_ENTITY": 21,
+    "ATTDEF": 61,
+    "LEADER": 127,
+    "SPLINE": 246,
+    "SOLID": 1145,
+    "IMAGE": 14,
+    "MLINE": 118,
+    "POINT": 119,
+    "ACAD_TABLE": 2,
+    "3DFACE": 1213,
+    "POLYLINE": 76,
+    "WIPEOUT": 7,
+    "MULTILEADER": 8
+  },
+  "top_layers": {
+    "Interior": 17847,
+    "Arch-plan": 13530,
+    "Furniture": 10213,
+    "FURN": 8367,
+    "WALL": 7447,
+    "Wall": 6651,
+    "wall": 5908,
+    "PDF7_Aec-Detail-Hatch": 5636,
+    "PDF6_Aec-Detail-Hatch": 5632,
+    "PDF_Aec-Detail-Hatch": 5632,
+    "PDF4_Aec-Detail-Hatch": 5631,
+    "PDF5_Aec-Detail-Hatch": 5631,
+    "PDF3_Aec-Detail-Hatch": 5630,
+    "FURNITURE": 5099,
+    "CBF-Furniture": 4880,
+    "car": 3665,
+    "8 L2": 3464,
+    "A-WALL": 3209,
+    "WINDOW": 3135,
+    "8 L1": 3073,
+    "Layer2": 2914,
+    "A_All": 2736,
+    "PDF7_SBA_Internal Callouts": 2571,
+    "PDF3_SBA_Internal Callouts": 2512,
+    "PDF6_SBA_Internal Callouts": 2488,
+    "H 5 SAAS-0025-SHHN-BLOCKS": 2487,
+    "0": 2431,
+    "FIXER": 2334,
+    "DIM": 2327,
+    "TILEF2": 2203,
+    "ASHADE": 2160,
+    "PDF4_SBA_Internal Callouts": 1993,
+    "A-FRN": 1944,
+    "TEXT": 1799,
+    "PDF_SBA_Internal Callouts": 1678,
+    "PDF5_SBA_Internal Callouts": 1673,
+    "WIN": 1649,
+    "wall pen .4": 1438,
+    "dim2": 1398,
+    "DOORS": 1301,
+    "BED-02-SHHN": 1288,
+    "WINOWS": 1286,
+    "wall-building": 1207,
+    "I-WALL": 1178,
+    "Layer1": 1048,
+    "chair": 990,
+    "0.3": 955,
+    "Layer11": 893,
+    "S-STRS": 872,
+    "text": 863,
+    "Steps": 844,
+    "det": 806,
+    "A-WALL-IDEN": 787,
+    "stairs": 770,
+    "gl": 756,
+    "www.cadblocksfree.com": 740,
+    "stair-steps": 727,
+    "PDF_SBA_500 GRID": 722,
+    "Arch-Furniture": 718,
+    "bedroom text": 716,
+    "EQUIP": 716,
+    "Texturas": 689,
+    "WALL-ASAAS-0025-00-A": 684,
+    "hatch": 668,
+    "PDF3_SBA_P_Door": 662,
+    "PDF4_SBA_P_Door": 643,
+    "Coloumns": 612,
+    "PDF5_SBA_P_Door": 609,
+    "line pen 1.": 565,
+    "WALLS GENERAL-ASAAS-0025-00-A": 551,
+    "DOOR": 531,
+    "A-waldrobe line pen 1.": 516,
+    "Railing": 499,
+    "D": 491,
+    "Win": 490,
+    "dim": 481,
+    "TEXTS": 476,
+    "PDF4_SBA_P_541_Dims centre to centre": 472,
+    "hiden": 463,
+    "Muro": 463,
+    "A-AREA-IDEN": 456,
+    "PDF4_SBA_P_541_Dims to wall": 439,
+    "windoor": 431,
+    "TILE": 422,
+    "RCC": 421,
+    "PDF4_SBA_P_541_Dims centre to grid": 416,
+    "Doors": 412,
+    "dorterd line of roof plan": 404,
+    "Layer4": 400,
+    "Layer7": 395,
+    "PDF3_SBA_P_541_Dims to wall": 387,
+    "A-GLAZ-IDEN": 383,
+    "grid sircle pen1": 380,
+    "PDF5_SBA_P_541_Dims centre to centre": 378,
+    "PDF3_SBA_P_541_Dims centre to centre": 376,
+    "PDF7_SBA_P_541_Dims centre to centre": 376,
+    "PDF6_SBA_P_541_Dims centre to centre": 375,
+    "PDF_SBA_P_541_Dims centre to centre": 375,
+    "axis": 374,
+    "PDF4_SBA_500 GRID": 366
+  },
+  "unique_layer_count": 789
+}

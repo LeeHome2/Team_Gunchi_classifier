@@ -1,0 +1,10 @@
+﻿{
+  "file_id": "korean_test",
+  "entities": [
+    {"entity_id": "1", "entity_type": "LINE", "raw_layer": "외벽선_주벽", "length": 4.0, "bbox_width": 4.0, "bbox_height": 0.01, "aspect_ratio": 400},
+    {"entity_id": "2", "entity_type": "LINE", "raw_layer": "벽체", "length": 3.5, "bbox_width": 3.5, "bbox_height": 0.01, "aspect_ratio": 350},
+    {"entity_id": "3", "entity_type": "ARC", "raw_layer": "문_안방", "length": 1.5, "bbox_width": 0.9, "bbox_height": 0.9, "aspect_ratio": 1.0},
+    {"entity_id": "4", "entity_type": "LINE", "raw_layer": "창호_거실", "length": 1.2, "bbox_width": 1.2, "bbox_height": 0.01, "aspect_ratio": 120}
+  ],
+  "log_predictions": false
+}

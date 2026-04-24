@@ -1,0 +1,27 @@
+{
+  "file_id": "2bhk_villa_design_ground_floor_plan_1",
+  "filename": "2bhk_villa_design_ground_floor_plan_1.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 443,
+  "extents": {
+    "min_x": -305.2539842742491,
+    "min_y": 212.8264728906698,
+    "max_x": -286.6074563752369,
+    "max_y": 237.4665948565271,
+    "width": 18.6465278990122,
+    "height": 24.640121965857304
+  },
+  "estimated_unit": "m",
+  "unique_layers": 9,
+  "layer_entity_counts": {
+    "Wall": 177,
+    "WINDOW": 92,
+    "DOOR": 42,
+    "TABLE": 36,
+    "SHAD": 33,
+    "stairs": 29,
+    "TEXT": 22,
+    "pipes": 11,
+    "Layer7": 1
+  }
+}

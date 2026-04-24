@@ -1,0 +1,35 @@
+{
+  "file_id": "14524557351136-Student accomodation floor plan",
+  "filename": "14524557351136-Student accomodation floor plan.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 2270,
+  "extents": {
+    "min_x": 69233.09848278255,
+    "min_y": 55531.8569578404,
+    "max_x": 93926.41298829083,
+    "max_y": 79141.24323819215,
+    "width": 24693.314505508286,
+    "height": 23609.386280351755
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 17,
+  "layer_entity_counts": {
+    "ASHADE": 720,
+    "WALL": 388,
+    "cub": 221,
+    "0": 201,
+    "DETAILS": 192,
+    "window": 131,
+    "HATCH": 104,
+    "existing door": 93,
+    "SD": 70,
+    "WIN DIM": 36,
+    "DOORS": 31,
+    "TEXT-2": 21,
+    "TEXT-3": 17,
+    "DIMENSION": 16,
+    "HEATER": 16,
+    "aFurniture": 11,
+    "TEXT-5": 2
+  }
+}

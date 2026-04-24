@@ -1,0 +1,29 @@
+{
+  "file_id": "1587136825Typical floor plan Residential",
+  "filename": "1587136825Typical floor plan Residential.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 700,
+  "extents": {
+    "min_x": 4435.717038838611,
+    "min_y": -954.8929954782535,
+    "max_x": 7232.87336165143,
+    "max_y": 869.6298499172899,
+    "width": 2797.156322812819,
+    "height": 1824.5228453955433
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 11,
+  "layer_entity_counts": {
+    "Wall": 266,
+    "Stair": 152,
+    "Win1": 100,
+    "Door": 54,
+    "Win": 41,
+    "ver": 36,
+    "Text": 24,
+    "Column": 14,
+    "Site": 5,
+    "3Slab": 5,
+    "3BWALL": 3
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "datasets": [
+    {
+      "id": "dataset1_crawled",
+      "source": "teammate crawled (영문 해외 도면 중심)",
+      "path": "../데이터셋1-dxf/dxf",
+      "file_count": 98,
+      "total_size_mb": 115,
+      "dxf_version": "AC1027",
+      "notes": "2026-04-23 구성 분석 완료. 상세: data/reports/dataset1_composition.md"
+    }
+  ]
+}

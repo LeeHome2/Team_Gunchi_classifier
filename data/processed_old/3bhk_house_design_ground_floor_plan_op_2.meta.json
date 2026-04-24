@@ -1,0 +1,32 @@
+{
+  "file_id": "3bhk_house_design_ground_floor_plan_op_2",
+  "filename": "3bhk_house_design_ground_floor_plan_op_2.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 1124,
+  "extents": {
+    "min_x": 32762.3498076829,
+    "min_y": 10332.26197411746,
+    "max_x": 33679.97200212749,
+    "max_y": 11770.27133426912,
+    "width": 917.6221944445933,
+    "height": 1438.00936015166
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 14,
+  "layer_entity_counts": {
+    "wall-building": 515,
+    "windoor": 170,
+    "text": 106,
+    "stair-steps": 82,
+    "BEAMS": 73,
+    "D": 55,
+    "TAB": 52,
+    "HATCHING": 18,
+    "TILES": 17,
+    "stair-railing": 12,
+    "FIXERS": 10,
+    "WINDOW": 10,
+    "Seal Title": 3,
+    "Layer1": 1
+  }
+}

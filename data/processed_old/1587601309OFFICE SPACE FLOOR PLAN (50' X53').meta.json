@@ -1,0 +1,37 @@
+{
+  "file_id": "1587601309OFFICE SPACE FLOOR PLAN (50' X53')",
+  "filename": "1587601309OFFICE SPACE FLOOR PLAN (50' X53').dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 400,
+  "extents": {
+    "min_x": 93311.2496764734,
+    "min_y": -19641.88960771266,
+    "max_x": 174872.5497870358,
+    "max_y": -9753.330894489687,
+    "width": 81561.3001105624,
+    "height": 9888.558713222972
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 19,
+  "layer_entity_counts": {
+    "Wall": 188,
+    "WIN": 47,
+    "WIMDOW": 30,
+    "TEXT": 24,
+    "COL": 22,
+    "STAIR": 21,
+    "HATCH": 16,
+    "RAIL": 10,
+    "DIM": 9,
+    "VER.": 8,
+    "HASH": 6,
+    "DOOR": 5,
+    "SHEET": 4,
+    "STEEL": 2,
+    "FURNI": 2,
+    "L WALL": 2,
+    "HAS": 2,
+    "TX": 1,
+    "door 1": 1
+  }
+}

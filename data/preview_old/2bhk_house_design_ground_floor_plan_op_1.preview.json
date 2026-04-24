@@ -1,0 +1,19 @@
+{
+  "file_id": "2bhk_house_design_ground_floor_plan_op_1",
+  "png_path": "/sessions/intelligent-trusting-fermat/mnt/26-1/ai_layer_classifier/data/preview/2bhk_house_design_ground_floor_plan_op_1.png",
+  "image_size_mb": 0.01,
+  "dpi_final": 100,
+  "dpi_attempts": 1,
+  "figsize_inches": [
+    12,
+    12
+  ],
+  "image_width_px": 330,
+  "image_height_px": 453,
+  "extents_cad": {
+    "min_x": 56833.99513614399,
+    "min_y": 9315.931248682746,
+    "max_x": 57361.08406552974,
+    "max_y": 10057.02426194433
+  }
+}

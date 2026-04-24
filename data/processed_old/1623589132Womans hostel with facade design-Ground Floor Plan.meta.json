@@ -1,0 +1,27 @@
+{
+  "file_id": "1623589132Womans hostel with facade design-Ground Floor Plan",
+  "filename": "1623589132Womans hostel with facade design-Ground Floor Plan.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 694,
+  "extents": {
+    "min_x": -115464.8638867591,
+    "min_y": 245560.545015352,
+    "max_x": -94133.618729298,
+    "max_y": 260561.1346080031,
+    "width": 21331.245157461104,
+    "height": 15000.589592651115
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 9,
+  "layer_entity_counts": {
+    ".25": 167,
+    ".50": 163,
+    "furniture": 135,
+    ".20": 77,
+    "PLUMBING": 76,
+    "dimensioning": 58,
+    ".18": 12,
+    "Layer10": 5,
+    "fine line": 1
+  }
+}

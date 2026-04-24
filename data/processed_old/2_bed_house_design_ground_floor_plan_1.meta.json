@@ -1,0 +1,31 @@
+{
+  "file_id": "2_bed_house_design_ground_floor_plan_1",
+  "filename": "2_bed_house_design_ground_floor_plan_1.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 448,
+  "extents": {
+    "min_x": 43761.55069445216,
+    "min_y": 11105.23455110165,
+    "max_x": 44444.35249569334,
+    "max_y": 12067.79237935177,
+    "width": 682.8018012411776,
+    "height": 962.5578282501192
+  },
+  "estimated_unit": "cm",
+  "unique_layers": 13,
+  "layer_entity_counts": {
+    "WALL": 167,
+    "BEAMS": 65,
+    "WINDOW": 45,
+    "text": 39,
+    "AROW": 37,
+    "stair-steps": 26,
+    "hiden": 24,
+    "Boundary Wall": 20,
+    "windoor": 14,
+    "DIM": 4,
+    "Layer1": 3,
+    "wall-compund": 2,
+    "Seal Title": 2
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "file_id": "2bhk_german_style_house_ground_floor_plan_1",
+  "filename": "2bhk_german_style_house_ground_floor_plan_1.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 536,
+  "extents": {
+    "min_x": 27333.91031904372,
+    "min_y": 9466.372009528592,
+    "max_x": 28093.35143414825,
+    "max_y": 10543.39759094961,
+    "width": 759.4411151045315,
+    "height": 1077.0255814210177
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 16,
+  "layer_entity_counts": {
+    "D": 102,
+    "wall-building": 99,
+    "hiden": 71,
+    "stairs": 52,
+    "text": 39,
+    "stair-steps": 30,
+    "railing": 26,
+    "HATCHING": 26,
+    "WINDOW": 24,
+    "COLUMNS": 21,
+    "DIM": 16,
+    "levels": 10,
+    "WALL": 7,
+    "windoor": 6,
+    "Boundary Wall": 5,
+    "Seal Title": 2
+  }
+}

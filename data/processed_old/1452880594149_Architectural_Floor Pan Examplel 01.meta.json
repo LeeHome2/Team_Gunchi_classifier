@@ -1,0 +1,19 @@
+{
+  "file_id": "1452880594149_Architectural_Floor Pan Examplel 01",
+  "filename": "1452880594149_Architectural_Floor Pan Examplel 01.dxf",
+  "dxf_version": "AC1027",
+  "total_entities": 2,
+  "extents": {
+    "min_x": 30960.866928330623,
+    "min_y": 23522.194297851554,
+    "max_x": 85353.45204909628,
+    "max_y": 50894.88443608069,
+    "width": 54392.58512076565,
+    "height": 27372.690138229136
+  },
+  "estimated_unit": "mm",
+  "unique_layers": 1,
+  "layer_entity_counts": {
+    "www.cadblocksfree.com": 2
+  }
+}
