@@ -89,8 +89,18 @@ def validate_floorplan_response(data: Dict[str, Any]) -> Dict[str, Any]:
         for idx, fp in enumerate(data["floorplans"]):
             if "bbox" not in fp:
                 raise ValueError(f"floorplans[{idx}]에 bbox 키가 없습니다.")
+            # floor_index 파싱: 없으면 -1, 있으면 int 변환
+            floor_index_raw = fp.get("floor_index")
+            if floor_index_raw is not None:
+                try:
+                    floor_index = int(floor_index_raw)
+                except (ValueError, TypeError):
+                    floor_index = -1
+            else:
+                floor_index = -1
             items.append({
                 "label": str(fp.get("label", f"floorplan_{idx}")),
+                "floor_index": floor_index,
                 "reason": str(fp.get("reason", "")),
                 "bbox": _validate_single_bbox(fp["bbox"]),
             })
@@ -105,6 +115,7 @@ def validate_floorplan_response(data: Dict[str, Any]) -> Dict[str, Any]:
             "floorplans_found": True,
             "floorplans": [{
                 "label": "floorplan_0",
+                "floor_index": -1,  # 구형 응답은 층 정보 없음
                 "reason": str(data.get("reason", "")),
                 "bbox": _validate_single_bbox(data["bbox"]),
             }],

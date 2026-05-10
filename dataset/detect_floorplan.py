@@ -38,8 +38,9 @@ def _mock_response() -> Dict[str, Any]:
         "floorplans_found": True,
         "floorplans": [
             {
-                "label": "fp0",
-                "reason": "[MOCK] 전체 이미지를 단일 평면도로 간주",
+                "label": "1F",
+                "floor_index": 0,
+                "reason": "[MOCK] 전체 이미지를 단일 1층 평면도로 간주",
                 "bbox": {"x_min": 0.0, "y_min": 0.0, "x_max": 1.0, "y_max": 1.0},
             }
         ],

@@ -47,3 +47,30 @@
 
 평면도가 전혀 없으면:
 {"floorplans_found": false, "floorplans": []}
+
+추가 작업:
+- 각 평면도가 몇 층인지 추론하여 "label" 필드에 답하라.
+  • "B1" "B2" — 지하층 (basement)
+  • "1F" "2F" "3F" ... — 지상층
+  • "RF" — 옥상/지붕층 (roof)
+- 추론 단서: 도면 내 "1층", "2F", "지하1층" 같은 한글/영문 라벨, 평면도 위치
+  (보통 책상에 펼친 도면처럼 1층이 좌하단/하단, 위층이 위쪽)
+- 추론 어려우면 "label" 을 "floorplan_N" 으로 표시 (N = 0부터)
+
+출력 형식 변경 — 각 floorplan 에 floor_index 필드 추가:
+{
+  "floorplans_found": true,
+  "floorplans": [
+    {
+      "label": "1F",
+      "floor_index": 0,
+      "reason": "...",
+      "bbox": {...}
+    }
+  ]
+}
+floor_index 규칙:
+- 1층 = 0, 2층 = 1, 3층 = 2 ... (0-based)
+- 지하1층(B1) = -1, 지하2층(B2) = -2
+- 옥상(RF) = 가장 큰 지상층 + 1
+- 추론 실패 시 floor_index = -999

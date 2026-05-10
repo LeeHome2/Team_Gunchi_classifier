@@ -141,17 +141,27 @@ def train_main(
     max_depth: int,
     learning_rate: float,
     seed: int,
+    train_ratio: float = 0.70,
+    val_ratio: float = 0.15,
 ) -> Dict:
     print("=" * 60)
     print(f"학습 시작: run_id={run_id}")
+    print(f"분할 비율: train={train_ratio:.2f} / val={val_ratio:.2f} / test={1-train_ratio-val_ratio:.2f}")
     print("=" * 60)
+
+    # 비율 유효성 검증
+    if not (0 < train_ratio < 1 and 0 <= val_ratio < 1 and train_ratio + val_ratio < 1):
+        raise ValueError(
+            f"잘못된 분할 비율: train={train_ratio}, val={val_ratio} "
+            f"(0<train<1, 0<=val<1, train+val<1 이어야 함)"
+        )
 
     # 1. 데이터 로드
     df = load_labeled_data(input_dir)
     print(f"전체 라벨 분포:\n{df['weak_label'].value_counts().to_dict()}\n")
 
     # 2. 파일 단위 split
-    splits = split_by_file(df, train_ratio=0.70, val_ratio=0.15, seed=seed)
+    splits = split_by_file(df, train_ratio=train_ratio, val_ratio=val_ratio, seed=seed)
     print(f"Split — train: {len(splits['train'])} / val: {len(splits['val'])} / test: {len(splits['test'])}")
     print(f"  파일 수: train={len(splits['train_files'])}, val={len(splits['val_files'])}, test={len(splits['test_files'])}\n")
 
@@ -213,6 +223,9 @@ def train_main(
             "max_depth": max_depth,
             "learning_rate": learning_rate,
             "random_state": seed,
+            "train_ratio": train_ratio,
+            "val_ratio": val_ratio,
+            "test_ratio": round(1 - train_ratio - val_ratio, 4),
         },
         "features": {
             "feature_dim": extractor.feature_dim,
@@ -262,6 +275,16 @@ def main() -> None:
     ap.add_argument("--max-depth", type=int, default=default_params.get("max_depth", 7))
     ap.add_argument("--learning-rate", type=float, default=default_params.get("learning_rate", 0.08))
     ap.add_argument("--seed", type=int, default=default_params.get("random_seed", 42))
+    ap.add_argument(
+        "--train-ratio", type=float,
+        default=default_params.get("train_ratio", 0.70),
+        help="훈련 데이터 비율 (기본 0.70)",
+    )
+    ap.add_argument(
+        "--val-ratio", type=float,
+        default=default_params.get("val_ratio", 0.15),
+        help="검증 데이터 비율 (기본 0.15). test_ratio = 1 - train - val",
+    )
     ap.add_argument("--no-mlops-log", action="store_true", help="mlops.db 기록 스킵")
     args = ap.parse_args()
 
@@ -275,6 +298,8 @@ def main() -> None:
         max_depth=args.max_depth,
         learning_rate=args.learning_rate,
         seed=args.seed,
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
     )
 
     # MLOps DB 기록
