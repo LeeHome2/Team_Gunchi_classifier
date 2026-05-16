@@ -25,7 +25,7 @@ from typing import List, Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -36,6 +36,7 @@ from mlops.registry import (  # noqa: E402
     get_experiment,
     list_experiments,
     log_predictions,
+    register_experiment,
     set_active,
 )
 
@@ -113,6 +114,8 @@ class TrainRequest(BaseModel):
     # 분할 비율 (사용자 설정 가능). test_ratio = 1 - train_ratio - val_ratio
     train_ratio: float = 0.70
     val_ratio: float = 0.15
+    # 모델 타입 선택: hist_gradient, random_forest, xgboost
+    model_type: str = "hist_gradient"
 
 
 class CollectRequest(BaseModel):
@@ -529,9 +532,12 @@ async def classify(req: ClassifyRequest):
 
 # ─── MLOps 엔드포인트 ────────────────────────────────────────
 @app.get("/api/mlops/datasets")
-async def list_datasets_endpoint():
+async def list_datasets_endpoint(dataset_id: Optional[str] = None):
     """
     학습 데이터셋 단계별 통계 + 가장 최근 학습의 train/val/test split 정보.
+
+    Query 파라미터:
+      - dataset_id: 특정 데이터셋 ID. 지정하면 해당 데이터셋의 stages만 반환.
 
     진도표 v0.2 항목 시각화:
       - "학습 데이터셋 등록 기능"      : raw_dxf, processed, labeled 단계별 통계
@@ -572,14 +578,103 @@ async def list_datasets_endpoint():
             ),
         }
 
-    stages = [
-        stage_stats(EXTERNAL_DATASET_DIR, "*.dxf", "1) 원본 DXF (외부 데이터셋)"),
-        stage_stats(DATA_DIR / "processed", "*.csv", "2) parse_dxf 결과 CSV"),
-        stage_stats(DATA_DIR / "processed", "*.bboxes.json", "3) vLLM Vision bbox JSON"),
-        stage_stats(DATA_DIR / "preview", "*.png", "4) 렌더 PNG"),
-        stage_stats(DATA_DIR / "cropped", "*.csv", "5) bbox 크롭 CSV"),
-        stage_stats(DATA_DIR / "labeled", "*.csv", "6) 학습용 라벨링 CSV ⭐"),
-    ]
+    def stage_stats_for_dataset(dxf_dir: Path, dataset_name: str):
+        """
+        특정 데이터셋 디렉토리 기준 파이프라인 단계 계산.
+
+        두 가지 디렉토리 구조 지원:
+        1. 하위 디렉토리 구조: data/processed/{dataset_name}/*.csv
+        2. 플랫 구조: data/processed/*.csv (DXF 파일명으로 매칭)
+        """
+        # DXF 파일명 목록 (확장자 제외)
+        dxf_basenames = set()
+        if dxf_dir.exists():
+            dxf_basenames = {f.stem for f in dxf_dir.glob("*.dxf")}
+
+        def stage_stats_filtered(folder: Path, pattern: str, label: str):
+            """플랫 구조에서 DXF 파일명 기준으로 필터링된 통계."""
+            if not folder.exists():
+                return {
+                    "label": label,
+                    "path": str(folder),
+                    "exists": False,
+                    "count": 0,
+                    "size_mb": 0.0,
+                    "last_modified": None,
+                }
+
+            # 패턴으로 모든 파일 찾기
+            all_files = list(folder.glob(pattern))
+
+            # DXF 파일명과 매칭되는 파일만 필터링
+            # 예: "file1.csv" -> "file1"과 DXF 파일명 비교
+            # 크롭/라벨 파일: "file1__floorplan_0.csv" -> "file1"
+            import re
+            matched_files = []
+            for f in all_files:
+                # 파일명에서 확장자들 제거 (.bboxes.json, .meta.json, .csv 등)
+                base = f.stem
+                for suffix in [".bboxes", ".meta", ".crop"]:
+                    if base.endswith(suffix):
+                        base = base[:-len(suffix)]
+                        break
+
+                # 크롭/라벨 파일의 __floorplan_N 또는 __full 접미사 제거
+                base = re.sub(r'__(?:floorplan_\d+|full)$', '', base)
+
+                if base in dxf_basenames:
+                    matched_files.append(f)
+
+            if not matched_files:
+                return {
+                    "label": label,
+                    "path": str(folder),
+                    "exists": True,
+                    "count": 0,
+                    "size_mb": 0.0,
+                    "last_modified": None,
+                }
+
+            size_bytes = sum(f.stat().st_size for f in matched_files if f.is_file())
+            return {
+                "label": label,
+                "path": str(folder),
+                "exists": True,
+                "count": len(matched_files),
+                "size_mb": round(size_bytes / (1024 * 1024), 2),
+                "last_modified": (
+                    max((f.stat().st_mtime for f in matched_files if f.is_file()), default=None)
+                ),
+            }
+
+        # 하위 디렉토리 구조 확인
+        processed_subdir = DATA_DIR / "processed" / dataset_name
+        labeled_subdir = DATA_DIR / "labeled" / dataset_name
+        preview_subdir = DATA_DIR / "preview" / dataset_name
+        cropped_subdir = DATA_DIR / "cropped" / dataset_name
+
+        # 하위 디렉토리가 존재하면 기존 방식, 아니면 플랫 구조에서 필터링
+        use_subdir = processed_subdir.exists() and any(processed_subdir.glob("*.csv"))
+
+        if use_subdir:
+            return [
+                stage_stats(dxf_dir, "*.dxf", "1) 원본 DXF"),
+                stage_stats(processed_subdir, "*.csv", "2) parse_dxf 결과 CSV"),
+                stage_stats(processed_subdir, "*.bboxes.json", "3) vLLM Vision bbox JSON"),
+                stage_stats(preview_subdir, "*.png", "4) 렌더 PNG"),
+                stage_stats(cropped_subdir, "*.csv", "5) bbox 크롭 CSV"),
+                stage_stats(labeled_subdir, "*.csv", "6) 학습용 라벨링 CSV ⭐"),
+            ]
+        else:
+            # 플랫 구조: DXF 파일명으로 매칭
+            return [
+                stage_stats(dxf_dir, "*.dxf", "1) 원본 DXF"),
+                stage_stats_filtered(DATA_DIR / "processed", "*.csv", "2) parse_dxf 결과 CSV"),
+                stage_stats_filtered(DATA_DIR / "processed", "*.bboxes.json", "3) vLLM Vision bbox JSON"),
+                stage_stats_filtered(DATA_DIR / "preview", "*.png", "4) 렌더 PNG"),
+                stage_stats_filtered(DATA_DIR / "cropped", "*.csv", "5) bbox 크롭 CSV"),
+                stage_stats_filtered(DATA_DIR / "labeled", "*.csv", "6) 학습용 라벨링 CSV ⭐"),
+            ]
 
     # 데이터셋 메타 (configs/dataset_meta.json)
     meta = {"datasets": []}
@@ -588,6 +683,35 @@ async def list_datasets_endpoint():
             meta = json.loads(DATASET_META_PATH.read_text(encoding="utf-8"))
         except Exception:
             pass
+
+    # dataset_id가 지정된 경우 해당 데이터셋만
+    if dataset_id:
+        target = next(
+            (ds for ds in meta.get("datasets", []) if ds.get("id") == dataset_id),
+            None,
+        )
+        # dxf_dir 또는 path 키 모두 지원 (호환성)
+        dxf_path = target.get("dxf_dir") or target.get("path") if target else None
+        if target and dxf_path:
+            dxf_dir = Path(dxf_path)
+            # 상대 경로인 경우 BASE_DIR 기준으로 변환
+            if not dxf_dir.is_absolute():
+                dxf_dir = (BASE_DIR / dxf_dir).resolve()
+            dataset_name = target.get("name") or target.get("id") or dxf_dir.name
+            stages = stage_stats_for_dataset(dxf_dir, dataset_name)
+        else:
+            # 해당 데이터셋을 찾을 수 없는 경우 빈 stages
+            stages = []
+    else:
+        # 전체 stages (기존 동작)
+        stages = [
+            stage_stats(EXTERNAL_DATASET_DIR, "*.dxf", "1) 원본 DXF (외부 데이터셋)"),
+            stage_stats(DATA_DIR / "processed", "*.csv", "2) parse_dxf 결과 CSV"),
+            stage_stats(DATA_DIR / "processed", "*.bboxes.json", "3) vLLM Vision bbox JSON"),
+            stage_stats(DATA_DIR / "preview", "*.png", "4) 렌더 PNG"),
+            stage_stats(DATA_DIR / "cropped", "*.csv", "5) bbox 크롭 CSV"),
+            stage_stats(DATA_DIR / "labeled", "*.csv", "6) 학습용 라벨링 CSV ⭐"),
+        ]
 
     # 가장 최근 experiment의 train/val/test split 정보
     latest_split = None
@@ -648,6 +772,61 @@ async def get_experiment_endpoint(run_id: str):
     return exp
 
 
+@app.delete("/api/mlops/experiments/{run_id}")
+async def delete_experiment_endpoint(run_id: str):
+    """
+    실험(모델) 삭제.
+
+    - 활성 모델은 삭제 불가
+    - DB에서 experiment, metrics 삭제
+    - 모델 파일 디렉토리 삭제
+    """
+    import shutil
+    from config import MODEL_DIR
+
+    # 활성 모델 확인
+    active = get_active()
+    if active and active.get("run_id") == run_id:
+        raise HTTPException(
+            status_code=400,
+            detail="운영 중인 모델은 삭제할 수 없습니다. 먼저 다른 모델을 활성화하세요."
+        )
+
+    # 실험 존재 여부 확인
+    exp = get_experiment(run_id)
+    if not exp:
+        raise HTTPException(status_code=404, detail="실험을 찾을 수 없습니다")
+
+    # DB에서 삭제
+    from mlops.db import get_conn, init_db
+    init_db()
+    with get_conn() as conn:
+        # metrics 먼저 삭제 (외래키)
+        conn.execute("DELETE FROM metrics WHERE run_id = ?", (run_id,))
+        # predictions 삭제
+        conn.execute("DELETE FROM predictions WHERE run_id = ?", (run_id,))
+        # deployments 삭제 (비활성 상태의 배포 이력)
+        conn.execute("DELETE FROM deployments WHERE run_id = ?", (run_id,))
+        # experiment 삭제
+        conn.execute("DELETE FROM experiments WHERE run_id = ?", (run_id,))
+
+    # 모델 파일 디렉토리 삭제
+    model_dir = MODEL_DIR / run_id
+    if model_dir.exists():
+        try:
+            shutil.rmtree(model_dir)
+            logger.info(f"모델 디렉토리 삭제: {model_dir}")
+        except Exception as e:
+            logger.warning(f"모델 디렉토리 삭제 실패 (무시): {e}")
+
+    logger.info(f"실험 삭제 완료: {run_id}")
+    return {
+        "success": True,
+        "message": "모델이 삭제되었습니다",
+        "deleted_run_id": run_id,
+    }
+
+
 @app.get("/api/mlops/models/active")
 async def get_active_model_endpoint():
     active = get_active()
@@ -683,6 +862,14 @@ async def trigger_training(req: TrainRequest):
             ),
         )
 
+    # 모델 타입 검증
+    valid_model_types = ["hist_gradient", "random_forest", "xgboost"]
+    if req.model_type not in valid_model_types:
+        raise HTTPException(
+            status_code=400,
+            detail=f"지원하지 않는 모델 타입: {req.model_type}. 가능: {valid_model_types}",
+        )
+
     cmd = [
         "python3", "-m", "training.train",
         "--input-dir", input_dir,
@@ -692,6 +879,7 @@ async def trigger_training(req: TrainRequest):
         "--learning-rate", str(req.learning_rate),
         "--train-ratio", str(req.train_ratio),
         "--val-ratio", str(req.val_ratio),
+        "--model-type", req.model_type,
     ]
 
     log_dir = BASE_DIR / "models" / "saved"
@@ -708,6 +896,9 @@ async def trigger_training(req: TrainRequest):
         )
     except Exception as e:
         return {"success": False, "error": f"학습 프로세스 시작 실패: {e}"}
+
+    # 작업 등록 (jobs 목록 조회용)
+    register_job(run_id, "train", proc.pid)
 
     logger.info(f"학습 트리거: run_id={run_id}, pid={proc.pid}")
     return {
@@ -897,6 +1088,8 @@ async def upload_dataset_zip(
                 stderr=subprocess.STDOUT,
                 cwd=str(BASE_DIR),
             )
+            # 작업 등록 (jobs 목록 조회용)
+            register_job(job_id, "build", proc.pid)
             response["auto_build"] = {
                 "job_id": job_id,
                 "pid": proc.pid,
@@ -949,6 +1142,9 @@ async def trigger_dataset_build(req: CollectRequest):
     except Exception as e:
         return {"success": False, "error": f"빌드 프로세스 시작 실패: {e}"}
 
+    # 작업 등록 (jobs 목록 조회용)
+    register_job(job_id, "build", proc.pid)
+
     logger.info(f"데이터셋 빌드 트리거: job_id={job_id}, pid={proc.pid}, dxf_dir={dxf_dir}")
     return {
         "success": True,
@@ -981,6 +1177,271 @@ async def get_job_log(job_id: str, tail: int = 100):
             except Exception as e:
                 return {"error": str(e)}
     raise HTTPException(status_code=404, detail=f"로그 없음: {job_id}")
+
+
+# ─── 모델 다운로드/업로드 ──────────────────────────────────
+@app.get("/api/mlops/models/{run_id}/download")
+async def download_model(run_id: str):
+    """
+    학습된 모델 파일 다운로드.
+
+    모델 디렉토리에서 model.joblib 또는 model.pkl 파일을 찾아 반환.
+    """
+    from config import MODEL_DIR
+
+    model_dir = MODEL_DIR / run_id
+    if not model_dir.exists():
+        raise HTTPException(status_code=404, detail=f"모델 디렉토리 없음: {run_id}")
+
+    # joblib 또는 pkl 파일 찾기
+    model_path = None
+    for ext in [".joblib", ".pkl"]:
+        candidate = model_dir / f"model{ext}"
+        if candidate.exists():
+            model_path = candidate
+            break
+
+    if not model_path:
+        raise HTTPException(status_code=404, detail=f"모델 파일 없음: {run_id}")
+
+    filename = f"model_{run_id}{model_path.suffix}"
+    return FileResponse(
+        path=str(model_path),
+        media_type="application/octet-stream",
+        filename=filename,
+    )
+
+
+@app.post("/api/mlops/models/upload")
+async def upload_model(
+    model_file: UploadFile = File(...),
+    model_name: Optional[str] = Form(None),
+    algorithm: str = Form("Custom"),
+):
+    """
+    외부에서 학습된 모델 파일 업로드 → 등록.
+
+    Form 파라미터:
+      - model_file: 모델 파일 (필수, .joblib/.pkl)
+      - model_name: 모델 이름/버전 (선택, 기본값: 파일명)
+      - algorithm: 알고리즘 종류 (선택, 기본값: "Custom")
+    """
+    import shutil
+    import time
+    import uuid as uuid_mod
+
+    from config import MODEL_DIR
+
+    # run_id 생성
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    short_id = uuid_mod.uuid4().hex[:6]
+    run_id = f"uploaded_{timestamp}_{short_id}"
+
+    # 저장 디렉토리 생성
+    model_dir = MODEL_DIR / run_id
+    model_dir.mkdir(parents=True, exist_ok=True)
+
+    # 파일 확장자 확인
+    if not model_file.filename:
+        raise HTTPException(status_code=400, detail="파일명이 없습니다")
+
+    file_ext = Path(model_file.filename).suffix.lower()
+    if file_ext not in [".joblib", ".pkl"]:
+        file_ext = ".joblib"  # 기본값
+
+    # 파일 저장
+    model_path = model_dir / f"model{file_ext}"
+    try:
+        with model_path.open("wb") as f:
+            shutil.copyfileobj(model_file.file, f)
+    except Exception as e:
+        shutil.rmtree(model_dir, ignore_errors=True)
+        raise HTTPException(status_code=500, detail=f"파일 저장 실패: {e}")
+
+    # experiments 테이블에 등록
+    from mlops.registry import register_experiment
+
+    model_version = model_name or Path(model_file.filename).stem
+    try:
+        register_experiment(
+            run_id=run_id,
+            model_type=algorithm,
+            status="completed",
+            train_info={"source": "upload", "original_filename": model_file.filename},
+        )
+    except Exception as e:
+        logger.warning(f"experiment 등록 실패 (계속 진행): {e}")
+
+    logger.info(f"모델 업로드 완료: run_id={run_id}, path={model_path}")
+    return {
+        "success": True,
+        "run_id": run_id,
+        "model_version": model_version,
+        "message": "모델이 성공적으로 등록되었습니다",
+    }
+
+
+# ─── 데이터셋 삭제 ─────────────────────────────────────────
+@app.delete("/api/mlops/datasets/{dataset_id}")
+async def delete_dataset(dataset_id: str):
+    """
+    등록된 데이터셋 삭제.
+
+    dataset_meta.json에서 해당 데이터셋 제거.
+    실제 파일은 삭제하지 않음 (안전).
+    """
+    import json
+
+    from config import DATASET_META_PATH
+
+    if not DATASET_META_PATH.exists():
+        raise HTTPException(status_code=404, detail="데이터셋 메타 파일 없음")
+
+    try:
+        meta = json.loads(DATASET_META_PATH.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"메타 파일 읽기 실패: {e}")
+
+    datasets = meta.get("datasets", [])
+
+    # 해당 데이터셋 찾기
+    target = None
+    for ds in datasets:
+        if ds.get("id") == dataset_id:
+            target = ds
+            break
+
+    if not target:
+        raise HTTPException(status_code=404, detail=f"데이터셋을 찾을 수 없습니다: {dataset_id}")
+
+    # 목록에서 제거
+    datasets = [ds for ds in datasets if ds.get("id") != dataset_id]
+    meta["datasets"] = datasets
+
+    # 저장
+    try:
+        DATASET_META_PATH.write_text(
+            json.dumps(meta, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"메타 파일 저장 실패: {e}")
+
+    logger.info(f"데이터셋 삭제: {dataset_id}")
+    return {
+        "success": True,
+        "message": "데이터셋이 삭제되었습니다",
+        "deleted_id": dataset_id,
+    }
+
+
+# ─── 작업 목록 조회 ────────────────────────────────────────
+# 메모리에 작업 상태 저장 (서버 재시작 시 초기화됨)
+ACTIVE_JOBS: dict = {}
+
+
+def register_job(job_id: str, job_type: str, pid: int) -> None:
+    """작업 등록 (내부 함수)."""
+    import time
+    ACTIVE_JOBS[job_id] = {
+        "type": job_type,
+        "pid": pid,
+        "status": "running",
+        "progress": 0,
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "completed_at": None,
+        "message": "시작됨",
+    }
+
+
+def update_job_progress(job_id: str, progress: int, message: Optional[str] = None) -> None:
+    """작업 진행률 업데이트 (내부 함수)."""
+    if job_id in ACTIVE_JOBS:
+        ACTIVE_JOBS[job_id]["progress"] = progress
+        if message:
+            ACTIVE_JOBS[job_id]["message"] = message
+
+
+@app.get("/api/mlops/jobs")
+async def list_jobs():
+    """
+    진행 중인 작업과 최근 완료된 작업 목록 반환.
+
+    로그 파일 기반으로 작업 목록 조회.
+    """
+    import time
+
+    from config import BASE_DIR
+
+    jobs = []
+
+    # 메모리에 있는 작업 (실행 중)
+    try:
+        import psutil
+        for job_id, job_info in list(ACTIVE_JOBS.items()):
+            pid = job_info.get("pid")
+            is_running = pid and psutil.pid_exists(pid)
+
+            if not is_running and job_info.get("status") == "running":
+                # 프로세스가 종료됨 → completed로 변경
+                job_info["status"] = "completed"
+                job_info["progress"] = 100
+                job_info["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+
+            jobs.append({
+                "job_id": job_id,
+                "type": job_info.get("type"),
+                "status": job_info.get("status", "unknown"),
+                "progress": job_info.get("progress"),
+                "started_at": job_info.get("started_at"),
+                "completed_at": job_info.get("completed_at"),
+                "message": job_info.get("message"),
+            })
+    except ImportError:
+        # psutil 없으면 메모리 작업만 반환
+        for job_id, job_info in ACTIVE_JOBS.items():
+            jobs.append({
+                "job_id": job_id,
+                "type": job_info.get("type"),
+                "status": job_info.get("status", "unknown"),
+                "progress": job_info.get("progress"),
+                "started_at": job_info.get("started_at"),
+                "completed_at": job_info.get("completed_at"),
+                "message": job_info.get("message"),
+            })
+
+    # 로그 파일에서 최근 작업 추가 (메모리에 없는 것)
+    log_dirs = [
+        (BASE_DIR / "models" / "saved", "train"),
+        (BASE_DIR / "data" / "reports", "build"),
+    ]
+
+    existing_ids = {j["job_id"] for j in jobs}
+
+    for log_dir, job_type in log_dirs:
+        if not log_dir.exists():
+            continue
+        for log_file in sorted(log_dir.glob(f"*.{job_type}.log"), reverse=True)[:10]:
+            job_id = log_file.stem.replace(f".{job_type}", "")
+            if job_id in existing_ids:
+                continue
+
+            stat = log_file.stat()
+            jobs.append({
+                "job_id": job_id,
+                "type": job_type,
+                "status": "completed",
+                "progress": 100,
+                "started_at": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(stat.st_ctime)),
+                "completed_at": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(stat.st_mtime)),
+                "message": f"로그 파일: {log_file.name}",
+            })
+            existing_ids.add(job_id)
+
+    # 최근 작업 순 정렬
+    jobs.sort(key=lambda x: x.get("started_at", ""), reverse=True)
+
+    return {"jobs": jobs[:20]}
 
 
 @app.post("/api/mlops/deploy")

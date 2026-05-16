@@ -126,7 +126,36 @@ def get_experiment(run_id: str) -> Optional[Dict[str, Any]]:
         return result
 
 
-# ─── DEPLOYMENTS ─────────────────────────────────────────────
+def register_experiment(
+    run_id: str,
+    model_type: str,
+    status: str = "completed",
+    train_info: Optional[Dict[str, Any]] = None,
+) -> None:
+    """간단한 experiment 등록 (업로드된 모델 등 metrics 없는 경우)."""
+    init_db()
+    with get_conn() as conn:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO experiments
+              (run_id, model_type, hyperparams, features_used, model_path,
+               training_time_s, status, train_info)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                run_id,
+                model_type,
+                json.dumps({}, ensure_ascii=False),
+                json.dumps({}, ensure_ascii=False),
+                "",  # model_path는 비워둠 (기본 경로 사용)
+                None,
+                status,
+                json.dumps(train_info or {}, ensure_ascii=False, default=str),
+            ),
+        )
+
+
+# ─���─ DEPLOYMENTS ──���──────────────────────────────────────────
 def set_active(run_id: str, environment: str = "production", notes: str = "") -> None:
     """지정 run_id를 active로 승격. 같은 environment의 이전 active는 비활성화."""
     init_db()
