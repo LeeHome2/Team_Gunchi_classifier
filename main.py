@@ -1066,16 +1066,17 @@ async def upload_dataset_zip(
     # 6. (옵션) 업로드 직후 자동 빌드 트리거
     if auto_build:
         import subprocess
+        job_id = f"build_{timestamp}_{short_id}"
         cmd = [
             "python3", "-m", "dataset.build_training_dataset",
             "--dxf-dir", str(dxf_dir),
+            "--job-id", job_id,
         ]
         if mock:
             cmd.append("--mock")
         if limit:
             cmd.extend(["--limit", str(limit)])
 
-        job_id = f"build_{timestamp}_{short_id}"
         log_dir = BASE_DIR / "data" / "reports"
         log_dir.mkdir(parents=True, exist_ok=True)
         log_path = log_dir / f"{job_id}.build.log"
@@ -1116,17 +1117,18 @@ async def trigger_dataset_build(req: CollectRequest):
     from config import BASE_DIR, EXTERNAL_DATASET_DIR
 
     dxf_dir = req.dxf_dir or str(EXTERNAL_DATASET_DIR)
+    job_id = f"build_{time.strftime('%Y%m%d_%H%M%S')}_{uuid_mod.uuid4().hex[:6]}"
 
     cmd = [
         "python3", "-m", "dataset.build_training_dataset",
         "--dxf-dir", dxf_dir,
+        "--job-id", job_id,
     ]
     if req.mock:
         cmd.append("--mock")
     if req.limit:
         cmd.extend(["--limit", str(req.limit)])
 
-    job_id = f"build_{time.strftime('%Y%m%d_%H%M%S')}_{uuid_mod.uuid4().hex[:6]}"
     log_dir = BASE_DIR / "data" / "reports"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / f"{job_id}.build.log"
@@ -1369,15 +1371,36 @@ async def list_jobs():
 
     로그 파일 기반으로 작업 목록 조회.
     """
+    import json
     import time
 
     from config import BASE_DIR
 
     jobs = []
+    jobs_to_remove = []
+
+    # 진행률 파일에서 실제 진행 상황 읽기
+    def read_progress_file(job_id: str, job_type: str) -> tuple:
+        """진행률 파일에서 progress와 message 읽기."""
+        # 작업 유형에 따라 진행률 파일 위치가 다름
+        if job_type == "build":
+            progress_file = BASE_DIR / "data" / "reports" / f"{job_id}.progress"
+        else:  # train
+            progress_file = BASE_DIR / "models" / "saved" / f"{job_id}.progress"
+
+        if progress_file.exists():
+            try:
+                data = json.loads(progress_file.read_text(encoding="utf-8"))
+                return data.get("progress", 0), data.get("message", "처리 중...")
+            except Exception:
+                pass
+        return 0, "시작 중..."
 
     # 메모리에 있는 작업 (실행 중)
     try:
         import psutil
+        from datetime import datetime
+
         for job_id, job_info in list(ACTIVE_JOBS.items()):
             pid = job_info.get("pid")
             is_running = pid and psutil.pid_exists(pid)
@@ -1387,16 +1410,45 @@ async def list_jobs():
                 job_info["status"] = "completed"
                 job_info["progress"] = 100
                 job_info["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                job_info["message"] = "완료됨"
+
+            # 완료된 작업은 10분(600초) 후 메모리에서 제거
+            # (최근 작업 목록에는 로그 파일 기반으로 계속 표시됨)
+            if job_info.get("status") == "completed" and job_info.get("completed_at"):
+                try:
+                    completed_time = datetime.strptime(job_info["completed_at"], "%Y-%m-%dT%H:%M:%S")
+                    elapsed = (datetime.now() - completed_time).total_seconds()
+                    if elapsed > 600:  # 10분 후 메모리에서 제거
+                        jobs_to_remove.append(job_id)
+                        continue
+                except (ValueError, TypeError):
+                    pass
+
+            # 실행 중인 작업은 진행률 파일에서 실제 진행 상황 읽기
+            progress = job_info.get("progress", 0)
+            message = job_info.get("message", "처리 중...")
+            if is_running:
+                file_progress, file_message = read_progress_file(job_id, job_info.get("type", ""))
+                if file_progress > 0:
+                    progress = file_progress
+                    message = file_message
+                    job_info["progress"] = progress
+                    job_info["message"] = message
 
             jobs.append({
                 "job_id": job_id,
                 "type": job_info.get("type"),
                 "status": job_info.get("status", "unknown"),
-                "progress": job_info.get("progress"),
+                "progress": progress,
                 "started_at": job_info.get("started_at"),
                 "completed_at": job_info.get("completed_at"),
-                "message": job_info.get("message"),
+                "message": message,
             })
+
+        # 오래된 완료 작업 메모리에서 제거
+        for job_id in jobs_to_remove:
+            del ACTIVE_JOBS[job_id]
+
     except ImportError:
         # psutil 없으면 메모리 작업만 반환
         for job_id, job_info in ACTIVE_JOBS.items():
@@ -1442,6 +1494,127 @@ async def list_jobs():
     jobs.sort(key=lambda x: x.get("started_at", ""), reverse=True)
 
     return {"jobs": jobs[:20]}
+
+
+# ─── 오분류 수정 (Corrections) API ────────────────────────────
+class CorrectionRequest(BaseModel):
+    file_id: Optional[str] = None
+    entity_id: Optional[str] = None
+    raw_layer: Optional[str] = None
+    original_class: str
+    corrected_class: str
+    confidence: Optional[float] = None
+
+
+@app.post("/api/corrections")
+async def submit_correction(req: CorrectionRequest):
+    """
+    사용자가 잘못된 분류를 수정할 때 기록.
+
+    예: wall로 분류되었지만 실제로는 door인 경우.
+    """
+    from mlops.db import get_conn, init_db
+
+    init_db()
+
+    # 현재 활성 모델의 run_id 가져오기
+    active = get_active()
+    run_id = active.get("run_id") if active else None
+
+    with get_conn() as conn:
+        conn.execute(
+            """
+            INSERT INTO corrections (run_id, file_id, entity_id, raw_layer, original_class, corrected_class, confidence)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                run_id,
+                req.file_id,
+                req.entity_id,
+                req.raw_layer,
+                req.original_class,
+                req.corrected_class,
+                req.confidence,
+            ),
+        )
+
+    logger.info(f"오분류 수정 기록: {req.original_class} → {req.corrected_class}")
+    return {
+        "success": True,
+        "message": "수정 내용이 기록되었습니다",
+        "original_class": req.original_class,
+        "corrected_class": req.corrected_class,
+    }
+
+
+@app.get("/api/mlops/stats")
+async def get_mlops_stats():
+    """
+    MLOps 통계 반환: 총 분류 횟수, 오분류 횟수(테스트셋 기반), 평균 신뢰도 등.
+    """
+    import json as json_lib
+    from mlops.db import get_conn, init_db
+
+    init_db()
+
+    stats = {
+        "total_predictions": 0,
+        "total_test_samples": 0,
+        "test_misclassifications": 0,
+        "test_accuracy": None,
+        "misclassification_rate": 0.0,
+        "average_confidence": None,
+        "confusion_matrix": None,
+    }
+
+    with get_conn() as conn:
+        # 총 예측 수 (운영 중 샘플링된 예측)
+        row = conn.execute("SELECT COUNT(*) as cnt FROM predictions").fetchone()
+        stats["total_predictions"] = row["cnt"] if row else 0
+
+        # 평균 신뢰도
+        row = conn.execute("SELECT AVG(confidence) as avg_conf FROM predictions WHERE confidence IS NOT NULL").fetchone()
+        if row and row["avg_conf"]:
+            stats["average_confidence"] = round(row["avg_conf"], 4)
+
+        # 현재 활성 모델의 테스트셋 메트릭에서 오분류 계산
+        active = get_active()
+        if active:
+            run_id = active.get("run_id")
+            # test split의 메트릭 조회
+            row = conn.execute(
+                """
+                SELECT accuracy, confusion_matrix, n_samples
+                FROM metrics
+                WHERE run_id = ? AND split = 'test'
+                """,
+                (run_id,)
+            ).fetchone()
+
+            if row:
+                stats["test_accuracy"] = row["accuracy"]
+                stats["total_test_samples"] = row["n_samples"] or 0
+
+                # confusion matrix에서 오분류 수 계산
+                if row["confusion_matrix"]:
+                    try:
+                        cm = json_lib.loads(row["confusion_matrix"])
+                        # confusion matrix: 대각선 = 정분류, 나머지 = 오분류
+                        total = 0
+                        correct = 0
+                        for i, row_vals in enumerate(cm):
+                            for j, val in enumerate(row_vals):
+                                total += val
+                                if i == j:
+                                    correct += val
+                        stats["test_misclassifications"] = total - correct
+                        stats["confusion_matrix"] = cm
+                        if total > 0:
+                            stats["misclassification_rate"] = round((total - correct) / total * 100, 2)
+                    except (json_lib.JSONDecodeError, TypeError):
+                        pass
+
+    return stats
 
 
 @app.post("/api/mlops/deploy")

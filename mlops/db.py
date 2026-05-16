@@ -79,6 +79,22 @@ CREATE TABLE IF NOT EXISTS deployments (
 );
 
 CREATE INDEX IF NOT EXISTS idx_deployments_active ON deployments(is_active, environment);
+
+CREATE TABLE IF NOT EXISTS corrections (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  run_id            TEXT,
+  file_id           TEXT,
+  entity_id         TEXT,
+  raw_layer         TEXT,
+  original_class    TEXT NOT NULL,
+  corrected_class   TEXT NOT NULL,
+  confidence        REAL,
+  corrected_by      TEXT DEFAULT 'user',
+  created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_corrections_run ON corrections(run_id);
+CREATE INDEX IF NOT EXISTS idx_corrections_created ON corrections(created_at);
 """
 
 

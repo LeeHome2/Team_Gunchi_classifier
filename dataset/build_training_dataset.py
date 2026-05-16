@@ -32,6 +32,20 @@ from typing import Dict, List
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import PREVIEW_DIR, PROCESSED_DIR, REPORT_DIR  # noqa: E402
 
+# 진행률 파일 경로 (전역 - main에서 설정)
+_PROGRESS_FILE: Path | None = None
+
+
+def write_progress(progress: int, message: str) -> None:
+    """진행률 파일에 현재 상태 기록 (API에서 폴링)."""
+    if _PROGRESS_FILE is None:
+        return
+    try:
+        data = {"progress": progress, "message": message}
+        _PROGRESS_FILE.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    except Exception:
+        pass
+
 
 def stage_parse(dxf_dir: Path, limit: int | None) -> Dict[str, int]:
     from dataset.parse_dxf import parse_dxf, write_outputs
@@ -149,6 +163,8 @@ def stage_label() -> Dict[str, int]:
 
 
 def main() -> None:
+    global _PROGRESS_FILE
+
     ap = argparse.ArgumentParser(description="학습 데이터 빌드 전체 파이프라인")
     ap.add_argument(
         "--dxf-dir",
@@ -162,7 +178,13 @@ def main() -> None:
     ap.add_argument("--skip-detect", action="store_true")
     ap.add_argument("--skip-crop", action="store_true")
     ap.add_argument("--skip-label", action="store_true")
+    ap.add_argument("--job-id", default=None, help="작업 ID (진행률 추적용)")
     args = ap.parse_args()
+
+    # 진행률 파일 초기화
+    if args.job_id:
+        _PROGRESS_FILE = REPORT_DIR / f"{args.job_id}.progress"
+        _PROGRESS_FILE.parent.mkdir(parents=True, exist_ok=True)
 
     from config import EXTERNAL_DATASET_DIR
     dxf_dir = Path(args.dxf_dir) if args.dxf_dir else EXTERNAL_DATASET_DIR
@@ -173,29 +195,34 @@ def main() -> None:
     print(f"  Mock 모드: {args.mock}")
     print(f"  Limit: {args.limit or '전체'}")
     print("=" * 60)
+    write_progress(0, "빌드 초기화 중...")
 
     report: List[Dict] = []
 
     if not args.skip_parse:
         print("\n[1/5] parse_dxf")
+        write_progress(5, "[1/5] DXF 파싱 중...")
         r = stage_parse(dxf_dir, args.limit)
         report.append(r)
         print(f"  → OK={r['ok']} FAIL={r['fail']}")
 
     if not args.skip_render:
         print("\n[2/5] render_preview")
+        write_progress(20, "[2/5] 미리보기 렌더링 중...")
         r = stage_render(args.limit)
         report.append(r)
         print(f"  → OK={r['ok']} SKIP(cached)={r.get('skip_cached',0)} FAIL={r['fail']}")
 
     if not args.skip_detect:
         print(f"\n[3/5] detect_floorplan (vLLM Vision {'MOCK' if args.mock else 'REAL'})")
+        write_progress(40, "[3/5] 평면도 영역 감지 중... (시간 소요)")
         r = stage_detect(args.mock, args.limit)
         report.append(r)
         print(f"  → OK={r['ok']} CACHED={r.get('cached',0)} FAIL={r['fail']} ({r['elapsed_s']}s)")
 
     if not args.skip_crop:
         print("\n[4/5] crop_entities_by_bbox")
+        write_progress(70, "[4/5] 엔티티 크롭 중...")
         r = stage_crop()
         report.append(r)
         print(f"  → OK={r['ok']} SKIP={r['skip']} FAIL={r['fail']} "
@@ -203,12 +230,14 @@ def main() -> None:
 
     if not args.skip_label:
         print("\n[5/5] weak_label")
+        write_progress(85, "[5/5] 라벨링 중...")
         r = stage_label()
         report.append(r)
         print(f"  → OK={r['ok']} FAIL={r['fail']}")
         print(f"  → 라벨 분포: {r['distribution']}")
 
     # 최종 리포트 저장
+    write_progress(95, "리포트 저장 중...")
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     report_path = REPORT_DIR / f"build_{time.strftime('%Y%m%d_%H%M%S')}.json"
     report_path.write_text(
@@ -219,6 +248,7 @@ def main() -> None:
         encoding="utf-8",
     )
     print(f"\n리포트 저장: {report_path}")
+    write_progress(100, "빌드 완료!")
 
 
 if __name__ == "__main__":

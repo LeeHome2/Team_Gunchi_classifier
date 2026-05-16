@@ -27,6 +27,7 @@ from typing import Dict, List
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -38,6 +39,14 @@ from sklearn.metrics import (
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import CLASSES, MODEL_DIR, TRAIN_PARAMS_PATH  # noqa: E402
 from training.feature_extractor import FeatureExtractor  # noqa: E402
+
+
+def write_progress(run_id: str, progress: int, message: str) -> None:
+    """진행률 파일에 현재 상태 기록 (API에서 폴링)."""
+    progress_file = MODEL_DIR / "saved" / f"{run_id}.progress"
+    progress_file.parent.mkdir(parents=True, exist_ok=True)
+    data = {"progress": progress, "message": message}
+    progress_file.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
 def load_labeled_data(input_dir: Path) -> pd.DataFrame:
@@ -148,6 +157,7 @@ def train_main(
     print(f"학습 시작: run_id={run_id}")
     print(f"분할 비율: train={train_ratio:.2f} / val={val_ratio:.2f} / test={1-train_ratio-val_ratio:.2f}")
     print("=" * 60)
+    write_progress(run_id, 0, "학습 초기화 중...")
 
     # 비율 유효성 검증
     if not (0 < train_ratio < 1 and 0 <= val_ratio < 1 and train_ratio + val_ratio < 1):
@@ -157,10 +167,12 @@ def train_main(
         )
 
     # 1. 데이터 로드
+    write_progress(run_id, 5, "데이터 로딩 중...")
     df = load_labeled_data(input_dir)
     print(f"전체 라벨 분포:\n{df['weak_label'].value_counts().to_dict()}\n")
 
     # 2. 파일 단위 split
+    write_progress(run_id, 10, "데이터 분할 중...")
     splits = split_by_file(df, train_ratio=train_ratio, val_ratio=val_ratio, seed=seed)
     print(f"Split — train: {len(splits['train'])} / val: {len(splits['val'])} / test: {len(splits['test'])}")
     print(f"  파일 수: train={len(splits['train_files'])}, val={len(splits['val_files'])}, test={len(splits['test_files'])}\n")
@@ -168,6 +180,7 @@ def train_main(
     train_df, val_df, test_df = splits["train"], splits["val"], splits["test"]
 
     # 3. Feature extractor fit on train
+    write_progress(run_id, 15, "특성 추출기 학습 중...")
     print("Feature extractor fit...")
     extractor = FeatureExtractor()
     extractor.fit(train_df)
@@ -180,6 +193,7 @@ def train_main(
     y_train = train_df["weak_label"].tolist()
 
     # 4. 학습
+    write_progress(run_id, 25, "모델 학습 중... (시간이 걸릴 수 있음)")
     print(f"HistGradientBoosting 학습 (max_iter={max_iter}, max_depth={max_depth})...")
     t0 = time.time()
     model = HistGradientBoostingClassifier(
@@ -192,9 +206,23 @@ def train_main(
     )
     model.fit(X_train, y_train)
     train_time = time.time() - t0
-    print(f"  학습 완료: {train_time:.1f}s\n")
+    print(f"  학습 완료: {train_time:.1f}s")
+    write_progress(run_id, 60, "모델 학습 완료")
 
-    # 5. 평가
+    # 5. 확률 보정 (Probability Calibration)
+    # 트리 기반 모델은 과신(overconfident) 경향이 있어 calibration 필요
+    if X_val is not None and len(val_df) >= 30:
+        write_progress(run_id, 65, "확률 보정 적용 중...")
+        print("  확률 보정(isotonic) 적용 중...")
+        calibrated_model = CalibratedClassifierCV(model, method="isotonic", cv="prefit")
+        calibrated_model.fit(X_val, val_df["weak_label"].tolist())
+        model = calibrated_model
+        print("  확률 보정 완료\n")
+    else:
+        print("  (검증셋 부족으로 확률 보정 생략)\n")
+
+    # 6. 평가
+    write_progress(run_id, 75, "모델 평가 중...")
     metrics_all = {
         "train": evaluate_split(model, extractor, train_df, "train"),
     }
@@ -207,16 +235,19 @@ def train_main(
         print(f"[{split_name:<5s}] n={m['n']}  acc={m['accuracy']:.3f}  f1_macro={m['f1_macro']:.3f}  "
               f"f1_weighted={m['f1_weighted']:.3f}  conf_mean={m['confidence_mean']:.3f}")
 
-    # 6. 저장
+    # 7. 저장
+    write_progress(run_id, 85, "모델 저장 중...")
     out_dir = MODEL_DIR / run_id
     out_dir.mkdir(parents=True, exist_ok=True)
 
     joblib.dump(model, out_dir / "model.joblib")
     joblib.dump(extractor.to_dict(), out_dir / "feature_pipeline.joblib")
 
+    is_calibrated = isinstance(model, CalibratedClassifierCV)
     config = {
         "run_id": run_id,
         "model_type": "HistGradientBoostingClassifier",
+        "calibrated": is_calibrated,
         "sklearn_based": True,
         "hyperparams": {
             "max_iter": max_iter,
@@ -252,6 +283,7 @@ def train_main(
     )
 
     print(f"\n모델 저장: {out_dir}")
+    write_progress(run_id, 100, "학습 완료!")
     return {"run_id": run_id, "out_dir": str(out_dir), "metrics": metrics_all, "config": config}
 
 
