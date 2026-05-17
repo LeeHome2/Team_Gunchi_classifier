@@ -1473,9 +1473,31 @@ async def list_jobs():
         import psutil
         from datetime import datetime
 
+        def is_job_process_running(pid: int, job_type: str) -> bool:
+            """PID가 실제로 해당 잡 프로세스인지 확인 (PID 재사용 방지)."""
+            if not pid or not psutil.pid_exists(pid):
+                return False
+            try:
+                proc = psutil.Process(pid)
+                cmdline = " ".join(proc.cmdline())
+                # train 잡은 "training.train", build 잡은 "build_training_dataset" 포함
+                if job_type == "train":
+                    return "training.train" in cmdline
+                elif job_type == "build":
+                    return "build_training_dataset" in cmdline
+                return False
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                return False
+
         for job_id, job_info in list(ACTIVE_JOBS.items()):
             pid = job_info.get("pid")
-            is_running = pid and psutil.pid_exists(pid)
+            job_type = job_info.get("type", "")
+            is_running = is_job_process_running(pid, job_type)
+
+            # 진행률 파일이 100%면 프로세스 상태와 무관하게 완료 처리
+            file_progress, file_message = read_progress_file(job_id, job_type)
+            if file_progress >= 100 and job_info.get("status") == "running":
+                is_running = False  # 강제 완료 처리
 
             if not is_running and job_info.get("status") == "running":
                 # 프로세스가 종료됨 → 진행률 파일에서 최종 상태 읽고 completed로 변경
@@ -1497,16 +1519,14 @@ async def list_jobs():
                 except (ValueError, TypeError):
                     pass
 
-            # 실행 중인 작업은 진행률 파일에서 실제 진행 상황 읽기
+            # 진행률 파일에서 실제 진행 상황 읽기 (이미 위에서 읽음)
             progress = job_info.get("progress", 0)
             message = job_info.get("message", "처리 중...")
-            if is_running:
-                file_progress, file_message = read_progress_file(job_id, job_info.get("type", ""))
-                if file_progress > 0:
-                    progress = file_progress
-                    message = file_message
-                    job_info["progress"] = progress
-                    job_info["message"] = message
+            if file_progress > 0:
+                progress = file_progress
+                message = file_message
+                job_info["progress"] = progress
+                job_info["message"] = message
 
             jobs.append({
                 "job_id": job_id,
