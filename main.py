@@ -102,7 +102,7 @@ class ClassifyRequest(BaseModel):
 class DeployRequest(BaseModel):
     run_id: str
     environment: str = "production"
-    notes: str = ""
+    notes: Optional[str] = None
 
 
 class TrainRequest(BaseModel):
@@ -752,10 +752,82 @@ async def list_datasets_endpoint(dataset_id: Optional[str] = None):
     except Exception as e:
         logger.warning(f"latest split 조회 실패: {e}")
 
+    # processed_datasets: 빌드별 라벨링 데이터셋 분리 목록
+    processed_datasets = []
+    labeled_dir = DATA_DIR / "labeled"
+    if labeled_dir.exists():
+        import re
+        from datetime import datetime
+
+        # 빌드별 디렉토리 또는 빌드 ID가 포함된 CSV 파일 탐색
+        # 패턴: build_YYYYMMDD_HHMMSS_XXXXXX
+        build_pattern = re.compile(r"^build_(\d{8}_\d{6})_([a-f0-9]{6})$")
+
+        # 1. 빌드별 서브디렉토리 탐색
+        for subdir in labeled_dir.iterdir():
+            if subdir.is_dir():
+                match = build_pattern.match(subdir.name)
+                if match:
+                    timestamp_str, short_id = match.groups()
+                    csv_files = list(subdir.glob("*.csv"))
+                    total_size = sum(f.stat().st_size for f in csv_files)
+                    labeled_count = 0
+                    for csv_file in csv_files:
+                        try:
+                            with open(csv_file, "r", encoding="utf-8") as f:
+                                labeled_count += sum(1 for _ in f) - 1  # 헤더 제외
+                        except Exception:
+                            pass
+
+                    try:
+                        processed_at = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S").isoformat()
+                    except ValueError:
+                        processed_at = None
+
+                    processed_datasets.append({
+                        "id": subdir.name,
+                        "name": subdir.name,
+                        "processed_at": processed_at,
+                        "labeled_count": labeled_count,
+                        "csv_path": str(subdir),
+                        "size_mb": round(total_size / (1024 * 1024), 2),
+                        "status": "ready" if csv_files else "empty",
+                    })
+
+        # 2. 플랫 구조에서 빌드 ID 없는 CSV도 하나의 "default" 데이터셋으로 집계
+        flat_csvs = [f for f in labeled_dir.glob("*.csv") if f.is_file()]
+        if flat_csvs and not processed_datasets:
+            total_size = sum(f.stat().st_size for f in flat_csvs)
+            labeled_count = 0
+            latest_mtime = 0
+            for csv_file in flat_csvs:
+                try:
+                    with open(csv_file, "r", encoding="utf-8") as f:
+                        labeled_count += sum(1 for _ in f) - 1
+                    mtime = csv_file.stat().st_mtime
+                    if mtime > latest_mtime:
+                        latest_mtime = mtime
+                except Exception:
+                    pass
+
+            processed_datasets.append({
+                "id": "default",
+                "name": "기본 라벨링 데이터셋",
+                "processed_at": datetime.fromtimestamp(latest_mtime).isoformat() if latest_mtime else None,
+                "labeled_count": labeled_count,
+                "csv_path": str(labeled_dir),
+                "size_mb": round(total_size / (1024 * 1024), 2),
+                "status": "ready" if flat_csvs else "empty",
+            })
+
+        # 최신순 정렬
+        processed_datasets.sort(key=lambda x: x.get("processed_at") or "", reverse=True)
+
     return {
         "stages": stages,
         "meta": meta,
         "latest_split": latest_split,
+        "processed_datasets": processed_datasets,
     }
 
 
@@ -1406,11 +1478,12 @@ async def list_jobs():
             is_running = pid and psutil.pid_exists(pid)
 
             if not is_running and job_info.get("status") == "running":
-                # 프로세스가 종료됨 → completed로 변경
+                # 프로세스가 종료됨 → 진행률 파일에서 최종 상태 읽고 completed로 변경
+                final_progress, final_message = read_progress_file(job_id, job_info.get("type", ""))
                 job_info["status"] = "completed"
-                job_info["progress"] = 100
+                job_info["progress"] = final_progress if final_progress > 0 else 100
                 job_info["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
-                job_info["message"] = "완료됨"
+                job_info["message"] = final_message if final_progress > 0 else "완료됨"
 
             # 완료된 작업은 10분(600초) 후 메모리에서 제거
             # (최근 작업 목록에는 로그 파일 기반으로 계속 표시됨)
@@ -1624,7 +1697,7 @@ async def deploy_endpoint(req: DeployRequest):
     if not exp:
         raise HTTPException(status_code=404, detail=f"run_id not found: {req.run_id}")
 
-    set_active(req.run_id, environment=req.environment, notes=req.notes)
+    set_active(req.run_id, environment=req.environment, notes=req.notes or "")
 
     # 새 active 모델 로드
     from inference.predictor import reload_active_bundle
