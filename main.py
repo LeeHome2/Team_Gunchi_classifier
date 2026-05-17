@@ -796,7 +796,7 @@ async def list_datasets_endpoint(dataset_id: Optional[str] = None):
 
         # 2. 플랫 구조에서 빌드 ID 없는 CSV도 하나의 "default" 데이터셋으로 집계
         flat_csvs = [f for f in labeled_dir.glob("*.csv") if f.is_file()]
-        if flat_csvs and not processed_datasets:
+        if flat_csvs:
             total_size = sum(f.stat().st_size for f in flat_csvs)
             labeled_count = 0
             latest_mtime = 0
@@ -820,8 +820,36 @@ async def list_datasets_endpoint(dataset_id: Optional[str] = None):
                 "status": "ready" if flat_csvs else "empty",
             })
 
-        # 최신순 정렬
-        processed_datasets.sort(key=lambda x: x.get("processed_at") or "", reverse=True)
+    # 3. meta.datasets에서 auto_csv 빌드 성공한 데이터셋 추가
+    existing_ids = {ds.get("id") for ds in processed_datasets}
+    for ds in meta.get("datasets", []):
+        ds_id = ds.get("id")
+        if ds_id in existing_ids:
+            continue  # 중복 방지
+
+        auto_csv = ds.get("auto_csv") or {}
+        if auto_csv.get("success") and auto_csv.get("labeled_count", 0) > 0:
+            labeled_dir_path = auto_csv.get("labeled_dir")
+            size_mb = 0.0
+            if labeled_dir_path:
+                labeled_path = Path(labeled_dir_path)
+                if labeled_path.exists():
+                    csv_files = list(labeled_path.glob("*.csv")) if labeled_path.is_dir() else [labeled_path]
+                    size_mb = round(sum(f.stat().st_size for f in csv_files if f.exists()) / (1024 * 1024), 2)
+
+            processed_datasets.append({
+                "id": ds_id,
+                "name": ds.get("name") or ds_id,
+                "processed_at": ds.get("uploaded_at") or auto_csv.get("completed_at"),
+                "labeled_count": auto_csv.get("labeled_count", 0),
+                "csv_path": labeled_dir_path,
+                "size_mb": size_mb,
+                "status": "ready",
+            })
+            existing_ids.add(ds_id)
+
+    # 최신순 정렬
+    processed_datasets.sort(key=lambda x: x.get("processed_at") or "", reverse=True)
 
     return {
         "stages": stages,
