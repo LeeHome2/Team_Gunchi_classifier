@@ -218,10 +218,13 @@ def train_main(
 
         class XGBClassifierWrapper(BaseEstimator, ClassifierMixin):
             """XGBoost를 sklearn 호환되게 감싸는 래퍼 (문자열 라벨 지원)."""
+            _estimator_type = "classifier"
+
             def __init__(self, **kwargs):
                 self.xgb_model = xgb.XGBClassifier(**kwargs)
                 self.label_encoder = LabelEncoder()
                 self._kwargs = kwargs
+                self.classes_ = None  # sklearn 호환을 위해 초기화
 
             def fit(self, X, y):
                 y_encoded = self.label_encoder.fit_transform(y)
