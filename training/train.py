@@ -40,6 +40,75 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import CLASSES, MODEL_DIR, TRAIN_PARAMS_PATH  # noqa: E402
 from training.feature_extractor import FeatureExtractor  # noqa: E402
 
+# XGBoost 래퍼 클래스 (모듈 레벨에 정의해야 pickle 가능)
+try:
+    import xgboost as xgb
+    from sklearn.base import BaseEstimator, ClassifierMixin
+    from sklearn.preprocessing import LabelEncoder
+
+    class XGBClassifierWrapper(BaseEstimator, ClassifierMixin):
+        """XGBoost를 sklearn 호환되게 감싸는 래퍼 (문자열 라벨 지원)."""
+        _estimator_type = "classifier"
+
+        def __init__(self, n_estimators=400, max_depth=7, learning_rate=0.08,
+                     random_state=42, tree_method="hist", eval_metric="mlogloss", **kwargs):
+            self.n_estimators = n_estimators
+            self.max_depth = max_depth
+            self.learning_rate = learning_rate
+            self.random_state = random_state
+            self.tree_method = tree_method
+            self.eval_metric = eval_metric
+            self.kwargs = kwargs
+            self.classes_ = None
+            self.label_encoder = None
+            self.xgb_model = None
+
+        def fit(self, X, y):
+            self.label_encoder = LabelEncoder()
+            y_encoded = self.label_encoder.fit_transform(y)
+            self.classes_ = self.label_encoder.classes_
+            self.xgb_model = xgb.XGBClassifier(
+                n_estimators=self.n_estimators,
+                max_depth=self.max_depth,
+                learning_rate=self.learning_rate,
+                random_state=self.random_state,
+                tree_method=self.tree_method,
+                eval_metric=self.eval_metric,
+                **self.kwargs,
+            )
+            self.xgb_model.fit(X, y_encoded)
+            return self
+
+        def predict(self, X):
+            y_pred_encoded = self.xgb_model.predict(X)
+            return self.label_encoder.inverse_transform(y_pred_encoded)
+
+        def predict_proba(self, X):
+            return self.xgb_model.predict_proba(X)
+
+        def get_params(self, deep=True):
+            return {
+                "n_estimators": self.n_estimators,
+                "max_depth": self.max_depth,
+                "learning_rate": self.learning_rate,
+                "random_state": self.random_state,
+                "tree_method": self.tree_method,
+                "eval_metric": self.eval_metric,
+                **self.kwargs,
+            }
+
+        def set_params(self, **params):
+            for key, value in params.items():
+                if hasattr(self, key):
+                    setattr(self, key, value)
+                else:
+                    self.kwargs[key] = value
+            return self
+
+    _XGBOOST_AVAILABLE = True
+except ImportError:
+    _XGBOOST_AVAILABLE = False
+
 
 def write_progress(run_id: str, progress: int, message: str) -> None:
     """진행률 파일에 현재 상태 기록 (API에서 폴링)."""
@@ -209,44 +278,8 @@ def train_main(
             validation_fraction=None,
         )
     elif model_type == "xgboost":
-        try:
-            import xgboost as xgb
-        except ImportError:
+        if not _XGBOOST_AVAILABLE:
             raise ImportError("xgboost가 설치되지 않았습니다. pip install xgboost")
-        from sklearn.preprocessing import LabelEncoder
-        from sklearn.base import BaseEstimator, ClassifierMixin
-
-        class XGBClassifierWrapper(BaseEstimator, ClassifierMixin):
-            """XGBoost를 sklearn 호환되게 감싸는 래퍼 (문자열 라벨 지원)."""
-            _estimator_type = "classifier"
-
-            def __init__(self, **kwargs):
-                self.xgb_model = xgb.XGBClassifier(**kwargs)
-                self.label_encoder = LabelEncoder()
-                self._kwargs = kwargs
-                self.classes_ = None  # sklearn 호환을 위해 초기화
-
-            def fit(self, X, y):
-                y_encoded = self.label_encoder.fit_transform(y)
-                self.classes_ = self.label_encoder.classes_
-                self.xgb_model.fit(X, y_encoded)
-                return self
-
-            def predict(self, X):
-                y_pred_encoded = self.xgb_model.predict(X)
-                return self.label_encoder.inverse_transform(y_pred_encoded)
-
-            def predict_proba(self, X):
-                return self.xgb_model.predict_proba(X)
-
-            def get_params(self, deep=True):
-                return self._kwargs
-
-            def set_params(self, **params):
-                self._kwargs.update(params)
-                self.xgb_model.set_params(**params)
-                return self
-
         print(f"XGBClassifier 학습 (n_estimators={max_iter}, max_depth={max_depth})...")
         model = XGBClassifierWrapper(
             n_estimators=max_iter,
