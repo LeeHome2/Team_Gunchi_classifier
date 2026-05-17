@@ -152,6 +152,7 @@ def train_main(
     seed: int,
     train_ratio: float = 0.70,
     val_ratio: float = 0.15,
+    model_type: str = "hist_gradient",
 ) -> Dict:
     print("=" * 60)
     print(f"학습 시작: run_id={run_id}")
@@ -193,18 +194,48 @@ def train_main(
 
     y_train = train_df["weak_label"].tolist()
 
-    # 4. 학습
+    # 4. 학습 - model_type에 따라 분기
     write_progress(run_id, 35, "모델 학습 시작...")
-    print(f"HistGradientBoosting 학습 (max_iter={max_iter}, max_depth={max_depth})...")
     t0 = time.time()
-    model = HistGradientBoostingClassifier(
-        max_iter=max_iter,
-        max_depth=max_depth,
-        learning_rate=learning_rate,
-        random_state=seed,
-        early_stopping=True if X_val is not None and len(val_df) > 50 else False,
-        validation_fraction=None,
-    )
+
+    if model_type == "hist_gradient":
+        print(f"HistGradientBoostingClassifier 학습 (max_iter={max_iter}, max_depth={max_depth})...")
+        model = HistGradientBoostingClassifier(
+            max_iter=max_iter,
+            max_depth=max_depth,
+            learning_rate=learning_rate,
+            random_state=seed,
+            early_stopping=True if X_val is not None and len(val_df) > 50 else False,
+            validation_fraction=None,
+        )
+    elif model_type == "xgboost":
+        try:
+            import xgboost as xgb
+        except ImportError:
+            raise ImportError("xgboost가 설치되지 않았습니다. pip install xgboost")
+        print(f"XGBClassifier 학습 (n_estimators={max_iter}, max_depth={max_depth})...")
+        model = xgb.XGBClassifier(
+            n_estimators=max_iter,
+            max_depth=max_depth,
+            learning_rate=learning_rate,
+            random_state=seed,
+            tree_method="hist",
+            use_label_encoder=False,
+            eval_metric="mlogloss",
+        )
+    elif model_type == "random_forest":
+        from sklearn.ensemble import RandomForestClassifier
+        print(f"RandomForestClassifier 학습 (n_estimators={max_iter}, max_depth={max_depth})...")
+        model = RandomForestClassifier(
+            n_estimators=max_iter,
+            max_depth=max_depth,
+            random_state=seed,
+            n_jobs=-1,
+        )
+    else:
+        raise ValueError(f"지원하지 않는 모델 타입: {model_type}")
+
+    model_type_name = type(model).__name__
     model.fit(X_train, y_train)
     train_time = time.time() - t0
     print(f"  학습 완료: {train_time:.1f}s")
@@ -248,9 +279,9 @@ def train_main(
     is_calibrated = isinstance(model, CalibratedClassifierCV)
     config = {
         "run_id": run_id,
-        "model_type": "HistGradientBoostingClassifier",
+        "model_type": model_type_name,
         "calibrated": is_calibrated,
-        "sklearn_based": True,
+        "sklearn_based": model_type != "xgboost",
         "hyperparams": {
             "max_iter": max_iter,
             "max_depth": max_depth,
@@ -340,6 +371,7 @@ def main() -> None:
         seed=args.seed,
         train_ratio=args.train_ratio,
         val_ratio=args.val_ratio,
+        model_type=args.model_type,
     )
 
     # MLOps DB 기록
