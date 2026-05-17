@@ -169,10 +169,11 @@ def train_main(
     # 1. 데이터 로드
     write_progress(run_id, 5, "데이터 로딩 중...")
     df = load_labeled_data(input_dir)
+    write_progress(run_id, 15, "데이터 로딩 완료")
     print(f"전체 라벨 분포:\n{df['weak_label'].value_counts().to_dict()}\n")
 
     # 2. 파일 단위 split
-    write_progress(run_id, 10, "데이터 분할 중...")
+    write_progress(run_id, 20, "데이터 분할 중...")
     splits = split_by_file(df, train_ratio=train_ratio, val_ratio=val_ratio, seed=seed)
     print(f"Split — train: {len(splits['train'])} / val: {len(splits['val'])} / test: {len(splits['test'])}")
     print(f"  파일 수: train={len(splits['train_files'])}, val={len(splits['val_files'])}, test={len(splits['test_files'])}\n")
@@ -180,7 +181,7 @@ def train_main(
     train_df, val_df, test_df = splits["train"], splits["val"], splits["test"]
 
     # 3. Feature extractor fit on train
-    write_progress(run_id, 15, "특성 추출기 학습 중...")
+    write_progress(run_id, 25, "특성 추출기 학습 중...")
     print("Feature extractor fit...")
     extractor = FeatureExtractor()
     extractor.fit(train_df)
@@ -193,7 +194,7 @@ def train_main(
     y_train = train_df["weak_label"].tolist()
 
     # 4. 학습
-    write_progress(run_id, 25, "모델 학습 중... (시간이 걸릴 수 있음)")
+    write_progress(run_id, 35, "모델 학습 시작...")
     print(f"HistGradientBoosting 학습 (max_iter={max_iter}, max_depth={max_depth})...")
     t0 = time.time()
     model = HistGradientBoostingClassifier(
@@ -212,7 +213,7 @@ def train_main(
     # 5. 확률 보정 (Probability Calibration)
     # 트리 기반 모델은 과신(overconfident) 경향이 있어 calibration 필요
     if X_val is not None and len(val_df) >= 30:
-        write_progress(run_id, 65, "확률 보정 적용 중...")
+        write_progress(run_id, 70, "확률 보정 적용 중...")
         print("  확률 보정(isotonic) 적용 중...")
         calibrated_model = CalibratedClassifierCV(model, method="isotonic", cv="prefit")
         calibrated_model.fit(X_val, val_df["weak_label"].tolist())
@@ -222,7 +223,7 @@ def train_main(
         print("  (검증셋 부족으로 확률 보정 생략)\n")
 
     # 6. 평가
-    write_progress(run_id, 75, "모델 평가 중...")
+    write_progress(run_id, 80, "모델 평가 시작...")
     metrics_all = {
         "train": evaluate_split(model, extractor, train_df, "train"),
     }
@@ -234,9 +235,10 @@ def train_main(
     for split_name, m in metrics_all.items():
         print(f"[{split_name:<5s}] n={m['n']}  acc={m['accuracy']:.3f}  f1_macro={m['f1_macro']:.3f}  "
               f"f1_weighted={m['f1_weighted']:.3f}  conf_mean={m['confidence_mean']:.3f}")
+    write_progress(run_id, 90, "모델 평가 완료")
 
     # 7. 저장
-    write_progress(run_id, 85, "모델 저장 중...")
+    write_progress(run_id, 95, "모델 저장 중...")
     out_dir = MODEL_DIR / run_id
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -318,6 +320,12 @@ def main() -> None:
         help="검증 데이터 비율 (기본 0.15). test_ratio = 1 - train - val",
     )
     ap.add_argument("--no-mlops-log", action="store_true", help="mlops.db 기록 스킵")
+    ap.add_argument(
+        "--model-type",
+        default="hist_gradient",
+        choices=["hist_gradient", "random_forest", "xgboost"],
+        help="모델 타입 (기본: hist_gradient)",
+    )
     args = ap.parse_args()
 
     run_id = args.run_id or f"v_{time.strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
