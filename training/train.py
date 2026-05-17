@@ -276,7 +276,10 @@ def train_main(
 
     # 5. 확률 보정 (Probability Calibration)
     # 트리 기반 모델은 과신(overconfident) 경향이 있어 calibration 필요
-    if X_val is not None and len(val_df) >= 30:
+    # XGBoost는 자체 확률 보정이 양호하고 sklearn CalibratedClassifierCV 호환 이슈로 skip
+    if model_type == "xgboost":
+        print("  (XGBoost — calibration skip, 자체 확률 보정 사용)\n")
+    elif X_val is not None and len(val_df) >= 30:
         write_progress(run_id, 70, "확률 보정 적용 중...")
         print("  확률 보정(isotonic) 적용 중...")
         calibrated_model = CalibratedClassifierCV(model, method="isotonic", cv="prefit")
