@@ -213,14 +213,44 @@ def train_main(
             import xgboost as xgb
         except ImportError:
             raise ImportError("xgboost가 설치되지 않았습니다. pip install xgboost")
+        from sklearn.preprocessing import LabelEncoder
+        from sklearn.base import BaseEstimator, ClassifierMixin
+
+        class XGBClassifierWrapper(BaseEstimator, ClassifierMixin):
+            """XGBoost를 sklearn 호환되게 감싸는 래퍼 (문자열 라벨 지원)."""
+            def __init__(self, **kwargs):
+                self.xgb_model = xgb.XGBClassifier(**kwargs)
+                self.label_encoder = LabelEncoder()
+                self._kwargs = kwargs
+
+            def fit(self, X, y):
+                y_encoded = self.label_encoder.fit_transform(y)
+                self.classes_ = self.label_encoder.classes_
+                self.xgb_model.fit(X, y_encoded)
+                return self
+
+            def predict(self, X):
+                y_pred_encoded = self.xgb_model.predict(X)
+                return self.label_encoder.inverse_transform(y_pred_encoded)
+
+            def predict_proba(self, X):
+                return self.xgb_model.predict_proba(X)
+
+            def get_params(self, deep=True):
+                return self._kwargs
+
+            def set_params(self, **params):
+                self._kwargs.update(params)
+                self.xgb_model.set_params(**params)
+                return self
+
         print(f"XGBClassifier 학습 (n_estimators={max_iter}, max_depth={max_depth})...")
-        model = xgb.XGBClassifier(
+        model = XGBClassifierWrapper(
             n_estimators=max_iter,
             max_depth=max_depth,
             learning_rate=learning_rate,
             random_state=seed,
             tree_method="hist",
-            use_label_encoder=False,
             eval_metric="mlogloss",
         )
     elif model_type == "random_forest":

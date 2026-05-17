@@ -1528,12 +1528,20 @@ async def list_jobs():
                 is_running = False  # 강제 완료 처리
 
             if not is_running and job_info.get("status") == "running":
-                # 프로세스가 종료됨 → 진행률 파일에서 최종 상태 읽고 completed로 변경
+                # 프로세스가 종료됨 → 진행률 파일에서 최종 상태 읽고 상태 결정
                 final_progress, final_message = read_progress_file(job_id, job_info.get("type", ""))
-                job_info["status"] = "completed"
-                job_info["progress"] = final_progress if final_progress > 0 else 100
                 job_info["completed_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
-                job_info["message"] = final_message if final_progress > 0 else "완료됨"
+
+                # progress가 100이면 성공, 아니면 실패로 판단
+                if final_progress >= 100:
+                    job_info["status"] = "completed"
+                    job_info["progress"] = 100
+                    job_info["message"] = final_message or "완료됨"
+                else:
+                    # 프로세스가 종료됐는데 progress < 100이면 실패
+                    job_info["status"] = "failed"
+                    job_info["progress"] = final_progress
+                    job_info["message"] = final_message or "학습 실패 (로그 확인 필요)"
 
             # 완료된 작업은 10분(600초) 후 메모리에서 제거
             # (최근 작업 목록에는 로그 파일 기반으로 계속 표시됨)
